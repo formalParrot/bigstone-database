@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIGSTONE</title>
+
+<style>
+body{font-family:Arial;margin:0;background:#1e1e1e;color:#fff}
+header{background:#008da0;padding:20px;text-align:center}
+input{width:60%;padding:10px;border-radius:8px;border:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px;padding:20px}
+.card{background:#2b2b2b;border-radius:16px;padding:15px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,.4)}
+.card img{width:100px;height:100px;object-fit:contain}
+.card h3{margin:10px 0 5px}
+.card p{font-size:14px;color:#ccc}
+.centered {align-items: center;}
+</style>
+</head>
+<body>
+<header>
+<img height="140px" class="centered" src="logo.png">
+<p><input type="text" id="search" placeholder="Search blocks or items..." onkeyup="searchItems()"></p>
+</header>
+
+<div class="grid" id="grid">
+<div class="card" data-name="TEST">
+<img src="component1.png">
+<h3>Pulse Extender</h3>
+<p>TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT </p>
+</div>
+
+<div class="card" data-name="TEST1">
+<img src="component2.png">
+<h3>Wireless Transmitter</h3>
+<p>TEXT TEXT TEXT TEXT TEXT TEXT </p>
+</div>
+
+<div class="card" data-name="TEST2">
+<img src="component3.png">
+<h3>Yellow Reciever</h3>
+<p>TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT </p>
+</div>
+
+<div class="card" data-name="TEST3">
+<img src="component4.png">
+<h3>Purple Reciever</h3>
+<p>TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT </p>
+</div>
+
+<div class="card" data-name="TEST">
+<img src="component1.png">
+<h3>Pulse Extender</h3>
+<p>TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT </p>
+</div>
+
+<div class="card" data-name="TEST1">
+<img src="component2.png">
+<h3>Wireless Transmitter</h3>
+<p>TEXT TEXT TEXT TEXT TEXT TEXT </p>
+</div>
+
+<div class="card" data-name="TEST2">
+<img src="component3.png">
+<h3>Yellow Reciever</h3>
+<p>TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT </p>
+</div>
+
+<div class="card" data-name="TEST3">
+<img src="component4.png">
+<h3>Purple Reciever</h3>
+<p>TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT </p>
+</div>
+
+<div class="card" data-name="TEST">
+<img src="component1.png">
+<h3>Pulse Extender</h3>
+<p>TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT </p>
+</div>
+
+<div class="card" data-name="TEST1">
+<img src="component2.png">
+<h3>Wireless Transmitter</h3>
+<p>TEXT TEXT TEXT TEXT TEXT TEXT </p>
+</div>
+
+<div class="card" data-name="TEST2">
+<img src="component3.png">
+<h3>Yellow Reciever</h3>
+<p>TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT </p>
+</div>
+
+<div class="card" data-name="TEST3">
+<img src="component4.png">
+<h3>Purple Reciever</h3>
+<p>TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT </p>
+</div>
+
+<div class="card" data-name="TEST">
+<img src="component1.png">
+<h3>Pulse Extender</h3>
+<p>TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT </p>
+</div>
+
+<div class="card" data-name="TEST1">
+<img src="component2.png">
+<h3>Wireless Transmitter</h3>
+<p>TEXT TEXT TEXT TEXT TEXT TEXT </p>
+</div>
+
+<div class="card" data-name="TEST2">
+<img src="component3.png">
+<h3>Yellow Reciever</h3>
+<p>TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT </p>
+</div>
+
+<div class="card" data-name="TEST3">
+<img src="component4.png">
+<h3>Purple Reciever</h3>
+<p>TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT </p>
+</div>
+
+<div class="card" data-name="TEST">
+<img src="component1.png">
+<h3>Pulse Extender</h3>
+<p>TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT </p>
+</div>
+
+<div class="card" data-name="TEST1">
+<img src="component2.png">
+<h3>Wireless Transmitter</h3>
+<p>TEXT TEXT TEXT TEXT TEXT TEXT </p>
+</div>
+
+<div class="card" data-name="TEST2">
+<img src="component3.png">
+<h3>Yellow Reciever</h3>
+<p>TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT </p>
+</div>
+
+<div class="card" data-name="TEST3">
+<img src="component4.png">
+<h3>Purple Reciever</h3>
+<p>TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT </p>
+</div>
+
+</div>
+
+<script>
+function searchItems(){
+let input=document.getElementById("search").value.toLowerCase();
+let cards=document.getElementsByClassName("card");
+for(let i=0;i<cards.length;i++){
+let name=cards[i].getAttribute("data-name");
+if(name.includes(input)){
+cards[i].style.display="block";
+}else{
+cards[i].style.display="none";
+}
+}
+}
+</script>
+</body>
+</html>
