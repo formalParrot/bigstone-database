@@ -16,6 +16,7 @@
 			"binding": "DB",
 			"database_name": "bigstone-db",
 			"database_id": "efc660d0-57e3-45e0-b64c-0b41c4dc7e22",
+			"remote": true,
 		},
 	],
 	/**
