@@ -165,11 +165,11 @@ input:focus {
     backdrop-filter: blur(8px); 
 }
 .custom-modal-dialog {
-  background: #222 !important;
-  border-radius: 24px !important;
-  box-shadow: 0 20px 0 #111, 0 40px 60px rgba(0,0,0,0.7) !important;
-  border: 1px solid #333 !important;
-  padding: 50px 40px 40px 40px !important;
+  background: #222 ;
+  border-radius: 24px ;
+  box-shadow: 0 20px 0 #111, 0 40px 60px rgba(0,0,0,0.7) ;
+  border: 1px solid #333 ;
+  padding: 50px 40px 40px 40px ;
   text-align: center;
 }
 
@@ -187,14 +187,14 @@ input:focus {
 .custom-close-btn {
   position: absolute;
   right: 25px; top: 20px;
-  color: #666 !important;
+  color: #666 ;
 }
 .download-btn {
   position: absolute;
-  right: 70px;
+  right: 30px;
   bottom: 35px;
   background: #008da0;
-  color: #fff !important;
+  color: #fff ;
   text-decoration: none;
   padding: 8px 16px;
   border-radius: 8px;
@@ -263,16 +263,16 @@ input:focus {
 </header>
 
 <div class="grid" id="grid">
-    <div class="card uk-card uk-card-default" data-name="pulse extender" onclick="openModal('Pulse Extender', 'Increases the duration of a redstone pulse.', '@_justParrot, @bobmat2011', 'component1.png', 'pulse_extender.zip')">
+    <div class="card uk-card uk-card-default" data-name="pulse extender" onclick="openModal('Pulse Extender', 'You power it and then the signal is extended as long as you set it in the top middle and you can also invert the signal by clicking on the button in the middle', '@_justParrot, @bobmat2011, @BastienA', 'component1.png', 'pulse_extender.zip')">
         <img src="component1.png">
         <h3 class="uk-card-title">Pulse Extender</h3>
-        <p>something should be added here</p>
+        <p>Increases the duration of a redstone pulse.</p>
     </div>
     
-    <div class="card uk-card uk-card-default" data-name="wireless transmitter" onclick="openModal('Wireless Transmitter', 'Transmits signals without wire.', '@bobmat2011', 'component2.png', 'wireless_transmitter.zip')">
+    <div class="card uk-card uk-card-default" data-name="wireless transmitter" onclick="openModal('Wireless Transmitter', 'Transmitts a wireless signal.', '@bobmat2011', 'component2.png', 'wireless_transmitter.zip')">
         <img src="component2.png">
         <h3 class="uk-card-title">Wireless Transmitter</h3>
-        <p>something should be added here</p>
+        <p>Transmitts a wireless signal.</p>
     </div>
 </div>
 
@@ -294,7 +294,7 @@ input:focus {
                 </figure>
             </div>
             
-            <h4>Description</h4>
+            <h4>Functionality</h4>
             <p id="m-desc"></p>
             
             <h4>Contributors</h4>
@@ -355,7 +355,7 @@ function initFloatingIcons() {
         // loop
         function animate() {
             x += dx; y += dy; rot += rotSpeed;
-            // Screen scanning
+            // Screen scanninh thing
             if (x > window.innerWidth + 50) x = -50;
             if (x < -50) x = window.innerWidth + 50;
             if (y > header.offsetHeight + 50) y = -50;
