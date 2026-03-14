@@ -372,6 +372,8 @@
             <div
                 class="card uk-card uk-card-default"
                 data-name="pulse extender"
+                tabindex="0"
+                role="button"
                 onclick="openModal('Pulse Extender', 'You power it and then the signal is extended as long as you set it in the top middle and you can also invert the signal by clicking on the button in the middle', '@_justParrot, @bobmat2011, @BastienA', 'component1.png', 'pulse_extender.zip')"
             >
                 <img src="component1.png" />
@@ -382,6 +384,8 @@
             <div
                 class="card uk-card uk-card-default"
                 data-name="wireless transmitter"
+                tabindex="0"
+                role="button"
                 onclick="openModal('Wireless Transmitter', 'Transmitts a wireless signal.', '@bobmat2011', 'component2.png', 'wireless_transmitter.zip')"
             >
                 <img src="component2.png" />
@@ -448,7 +452,11 @@
                 }
             }
 
+            // Modal
+            let lastFocusedElement = null;
+
             function openModal(t, d, c, i, dl) {
+                lastFocusedElement = document.activeElement;
                 document.getElementById("m-title").innerText = t;
                 document.getElementById("m-desc").innerText = d;
                 document.getElementById("m-img").src = i;
@@ -463,7 +471,13 @@
                     tags.appendChild(s);
                 });
 
-                UIkit.modal(document.getElementById("compModal")).show();
+                const modal = UIkit.modal(document.getElementById("compModal"));
+                
+                modal.$el.addEventListener('hidden', () => {
+                    if (lastFocusedElement) lastFocusedElement.focus();
+                });
+                
+                modal.show();
             }
 
             // Create flying blocks
@@ -512,6 +526,16 @@
                     animate();
                 }
             }
+
+            // Keyboard controls
+            document.querySelectorAll(".card").forEach(card => {
+                card.addEventListener("keydown", (e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        card.click();
+                    }
+                });
+            });
 
             // starts the obecxts
             window.onload = initFloatingIcons;
