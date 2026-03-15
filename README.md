@@ -11,6 +11,6 @@ Our API is deployed via Cloudflare Workers:
 
 > **Note:** The API only accepts requests from our website or `localhost:8787`.
 
-More on how to use the documentation can be found at https://formalparrot.github.io/bigstone-database/docs/
+More on how to use the API can be found at https://formalparrot.github.io/bigstone-database/docs/
 
 ---
