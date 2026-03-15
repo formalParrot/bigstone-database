@@ -15,7 +15,6 @@ export async function handleProjects(request, env) {
 
 		const result = await env.DB.prepare('INSERT INTO projects (name, desc) VALUES (?, ?)').bind(name, desc).run();
 
-		// Log this in your terminal (wrangler dev) to see exactly what D1 is sending back
 		console.log(JSON.stringify(result));
 
 		return new Response(
