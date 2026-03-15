@@ -1,0 +1,52 @@
+<!doctype html>
+
+<!-- messy but works -->
+<html>
+    <head>
+        <title>Create Projects</title>
+    </head>
+    <body>
+        <h2>Create a Project</h2>
+
+        <input
+            id="name"
+            placeholder="Project name"
+            maxlength="50"
+        /><br /><br />
+        <textarea id="desc" placeholder="Description" maxlength="200"></textarea
+        ><br /><br />
+
+        <button onclick="createProject()">Create</button>
+
+        <pre id="output"></pre>
+
+        <script>
+            async function createProject() {
+                const name = document.getElementById("name").value;
+                const desc = document.getElementById("desc").value;
+
+                try {
+                    const res = await fetch(
+                        "https://bigstone-api.justparrot.workers.dev/projects",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ name, desc }),
+                        },
+                    );
+
+                    const data = await res.json();
+
+                    document.getElementById("output").textContent =
+                        "Full Response:\n" +
+                        JSON.stringify(data, null, 2) +
+                        "\n\nID: " +
+                        data.id;
+                } catch (err) {
+                    document.getElementById("output").textContent =
+                        "Error: " + err;
+                }
+            }
+        </script>
+    </body>
+</html>
