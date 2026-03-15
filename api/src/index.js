@@ -1,6 +1,8 @@
 import { handleProjects } from './routes/projects.js';
+/*
 import { handleComponents } from './routes/components.js';
 import { handleContributors } from './routes/contributors.js';
+*/
 
 export default {
 	async fetch(request, env) {
@@ -31,7 +33,7 @@ export default {
 		if (url.pathname.startsWith('/projects')) {
 			return handleProjects(request, env, corsHeaders);
 		}
-
+		/*
 		if (url.pathname.startsWith('/components')) {
 			return handleComponents(request, env, corsHeaders);
 		}
@@ -39,6 +41,7 @@ export default {
 		if (url.pathname.startsWith('/contributors')) {
 			return handleContributors(request, env, corsHeaders);
 		}
+		*/
 
 		return new Response('Not found', { status: 404 });
 	},

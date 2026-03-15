@@ -10,7 +10,9 @@ export async function handleProjects(request, env, corsHeaders) {
 
 		console.log(JSON.stringify(result));
 
-		return new Response(JSON.stringify(result.results), { headers: { 'Content-Type': 'application/json', ...corsHeaders } });
+		return new Response(JSON.stringify({ id: result.meta.last_row_id }), {
+			headers: { 'Content-Type': 'application/json', ...corsHeaders },
+		});
 	}
 
 	/* GET methods */
@@ -21,10 +23,22 @@ export async function handleProjects(request, env, corsHeaders) {
 	}
 
 	if (request.method === 'GET' && path.startsWith('/projects/')) {
-		const id = url.pathname.split('/').pop();
+		const id = path.split('/').pop();
 
 		const result = await env.DB.prepare('SELECT * FROM projects WHERE id = ?').bind(id).first();
 
 		return new Response(JSON.stringify(result), { headers: { 'Content-Type': 'application/json', ...corsHeaders } });
+	}
+
+	/* DELETE methods */
+	if (request.method === 'DELETE' && path.startsWith('/projects/remove/')) {
+		const id = path.split('/').pop();
+		const result = await env.DB.prepare('DELETE FROM projects WHERE id = ?').bind(id).run();
+		return new Response(
+			JSON.stringify({ success: true, string: 'Deleted successfuly. i do not know which id was deleted, so just pls remember :D' }),
+			{
+				headers: { 'Content-Type': 'application/json', ...corsHeaders },
+			},
+		);
 	}
 }
