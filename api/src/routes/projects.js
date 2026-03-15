@@ -10,36 +10,21 @@ export async function handleProjects(request, env) {
 
 		console.log(JSON.stringify(result));
 
-		return new Response(
-			JSON.stringify({
-				id: result.meta.last_row_id,
-			}),
-			{ headers: { 'Content-Type': 'application/json' } },
-		);
+		return new Response(JSON.stringify(result.results), { headers: { 'Content-Type': 'application/json' } });
 	}
 
 	/* GET methods */
 	if (request.method === 'GET' && path === '/projects') {
 		const result = await env.DB.prepare('SELECT * FROM projects').all();
 
-		return new Response(
-			JSON.stringify({
-				projects: result.results,
-			}),
-			{ headers: { 'Content-Type': 'application/json' } },
-		);
+		return new Response(JSON.stringify(result.results), { headers: { 'Content-Type': 'application/json' } });
 	}
 
 	if (request.method === 'GET' && path.startsWith('/projects/')) {
 		const id = url.pathname.split('/').pop();
 
-		const project = await env.DB.prepare('SELECT * FROM projects WHERE id = ?').bind(id).first();
+		const result = await env.DB.prepare('SELECT * FROM projects WHERE id = ?').bind(id).first();
 
-		return new Response(
-			JSON.stringify({
-				project: project,
-			}),
-			{ headers: { 'Content-Type': 'application/json' } },
-		);
+		return new Response(JSON.stringify(result), { headers: { 'Content-Type': 'application/json' } });
 	}
 }
