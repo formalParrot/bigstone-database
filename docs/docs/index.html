@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bigstone API Docs</title>
+        <style>
+            body {
+                margin: 0;
+                font-family: Arial, sans-serif;
+                display: flex;
+                height: 100vh;
+                background: #1e1e1e;
+                color: #fff;
+            }
+
+            .sidebar {
+                width: 250px;
+                background: #111;
+                padding: 20px;
+                box-shadow: 2px 0 0 #000;
+                overflow-y: auto;
+            }
+            .sidebar h2 {
+                color: #00b3c6;
+                margin-top: 0;
+            }
+            .endpoint-link {
+                display: block;
+                color: #ccc;
+                text-decoration: none;
+                margin: 8px 0;
+                cursor: pointer;
+            }
+            .endpoint-link:hover {
+                color: #00b3c6;
+            }
+
+            .sidebar-header {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin: 0;
+            }
+
+            .home-icon {
+                display: flex;
+                align-items: center;
+            }
+
+            .home-icon img {
+                width: 22px;
+                height: 22px;
+                display: block;
+
+                filter: invert(62%) sepia(48%) saturate(631%) hue-rotate(140deg)
+                    brightness(94%) contrast(90%);
+            }
+            .home-icon img:hover {
+                transform: scale(1.15);
+            }
+            .home-icon:hover {
+                transform: scale(1.2);
+            }
+
+            .content {
+                flex: 1;
+                padding: 40px;
+                overflow-y: auto;
+            }
+            .endpoint {
+                margin-bottom: 40px;
+            }
+            .endpoint h2 {
+                margin: 0 0 10px;
+                color: #00b3c6;
+            }
+            .endpoint pre {
+                background: #222;
+                padding: 15px;
+                border-radius: 8px;
+                overflow-x: auto;
+                white-space: pre-wrap;
+            }
+            .method {
+                font-weight: bold;
+                color: #ffae42;
+            }
+            .copy-btn {
+                margin-top: 10px;
+                padding: 6px 12px;
+                background: #008da0;
+                border: none;
+                border-radius: 6px;
+                color: #fff;
+                cursor: pointer;
+            }
+            .copy-btn:active {
+                transform: translateY(2px);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <a href="/" class="home-icon" title="Home">
+                    <img src="home.png" alt="Home" />
+                </a>
+                <h2>Endpoints</h2>
+            </div>
+
+            <div id="sidebar-links"></div>
+        </div>
+
+        <div class="content" id="content"></div>
+
+        <script>
+            async function loadEndpoints() {
+                const res = await fetch("endpoints.json");
+                const endpoints = await res.json();
+
+                const sidebar = document.getElementById("sidebar-links");
+                const content = document.getElementById("content");
+
+                endpoints.forEach((ep, index) => {
+                    // Sidebar link
+                    const link = document.createElement("a");
+                    link.className = "endpoint-link";
+                    link.innerText = `${ep.method} ${ep.path}`;
+                    link.onclick = () => {
+                        document
+                            .getElementById("ep-" + index)
+                            .scrollIntoView({ behavior: "smooth" });
+                    };
+                    sidebar.appendChild(link);
+
+                    // Content section
+                    const section = document.createElement("div");
+                    section.className = "endpoint";
+                    section.id = "ep-" + index;
+
+                    let bodyCode = ep.body
+                        ? JSON.stringify(ep.body, null, 2)
+                        : "";
+                    section.innerHTML = `
+          <h2>${ep.name} <span class="method">[${ep.method}]</span></h2>
+          <p>${ep.description}</p>
+          ${bodyCode ? `<h4>Request Body</h4><pre>${bodyCode}</pre>` : ""}
+          <h4>Fetch</h4>
+          <pre id="example-${index}">${ep.example}</pre>
+        `;
+                    content.appendChild(section);
+                });
+            }
+
+            function copyExample(index) {
+                const exampleText = document.getElementById(
+                    `example-${index}`,
+                ).innerText;
+                navigator.clipboard.writeText(exampleText).then(() => {
+                    alert("Copied to clipboard!");
+                });
+            }
+
+            loadEndpoints();
+        </script>
+    </body>
+</html>
