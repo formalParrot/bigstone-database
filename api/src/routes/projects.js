@@ -8,6 +8,11 @@ export async function handleProjects(request, env) {
 
 		const result = await env.DB.prepare('INSERT INTO projects (name, desc) VALUES (?, ?)').bind(name, desc).run();
 
+<<<<<<< HEAD
+=======
+		console.log(JSON.stringify(result));
+
+>>>>>>> 40a8fa8c54ae04389d2edd35777618288f494e51
 		return new Response(
 			JSON.stringify({
 				id: result.meta.last_row_id,
