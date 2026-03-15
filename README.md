@@ -5,7 +5,8 @@
 ---
 
 ## API Endpoints:
-We use Cloudlfare Workers to deploy our API. The url is ```https://bigstone-api.justparrot.workers.dev```
+We use Cloudlfare Workers to deploy our API. The url is ```https://bigstone-api.justparrot.workers.dev```.
+
 <u>THE API ONLY ACCEPTS REQUESTS FROM OUR WEBSITE, OR LOCALHOST:8787</u>
 ### Projects (/projects/)
 **POST** Create Project with (name, desc)
