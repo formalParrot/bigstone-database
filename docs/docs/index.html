@@ -103,6 +103,24 @@
             .copy-btn:active {
                 transform: translateY(2px);
             }
+            .addproject-btn {
+                position: absolute;
+                right: 30px;
+                top: 25px;
+                background: #008da0;
+                color: #fff;
+                text-decoration: none;
+                padding: 8px 16px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: bold;
+                box-shadow: 0 4px 0 #005f6b;
+                transition: all 0.1s ease;
+            }
+            .addproject-btn:active {
+                transform: translateY(4px);
+                box-shadow: 0 0px 0 #005f6b;
+            }
         </style>
     </head>
     <body>
@@ -115,6 +133,7 @@
             </div>
 
             <b><div id="sidebar-links"></div></b>
+            <a id="m-download" href="https://formalparrot.github.io/bigstone-database/interfaces/projects.html" class="addproject-btn" download>Test API</a>
         </div>
 
         <div class="content" id="content"></div>
