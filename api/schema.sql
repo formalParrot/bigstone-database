@@ -1,40 +1,65 @@
 PRAGMA foreign_keys = ON;
 
--- Projects
-CREATE TABLE projects (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL,
-  desc TEXT NOT NULL, -- project description
-  created_at INTEGER NOT NULL DEFAULT (strftime('%s','now'))
+-- USERS
+CREATE TABLE users (
+  id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+  username TEXT NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  cmpnt_creations INTEGER DEFAULT 0
 );
 
--- Components
-CREATE TABLE components (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  project_id INTEGER NOT NULL,
+-- PROJECTS
+CREATE TABLE projects (
+  id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
   name TEXT NOT NULL,
   desc TEXT NOT NULL,
-  file_url TEXT,       -- optional file link
-  image_url TEXT,      -- optional image link
-  created_at INTEGER NOT NULL DEFAULT (strftime('%s','now')),
+  owner_id TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  banner_url TEXT,
+  downloads INTEGER DEFAULT 0,
+
+  FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- COMPONENTS
+CREATE TABLE components (
+  id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+  project_id TEXT NOT NULL,
+  name TEXT NOT NULL,
+  desc TEXT NOT NULL,
+  ports TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  image_url TEXT,
+  downloads INTEGER DEFAULT 0,
+
+  dim_x INTEGER,
+  dim_y INTEGER,
+  dim_z INTEGER,
+
   FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
 );
 
--- Contributors
+-- COMPONENT DOWNLOADS
+CREATE TABLE component_downloads (
+  id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+  component_id TEXT NOT NULL,
+  link TEXT NOT NULL,
+
+  FOREIGN KEY (component_id) REFERENCES components(id) ON DELETE CASCADE
+);
+
+-- CONTRIBUTORS
 CREATE TABLE contributors (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  username TEXT NOT NULL UNIQUE
-);
+  id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+  project_id TEXT NOT NULL,
+  user_id TEXT NOT NULL,
 
--- Project contributors' joined table
-CREATE TABLE project_contributors (
-  project_id INTEGER NOT NULL,
-  contributor_id INTEGER NOT NULL,
-  PRIMARY KEY (project_id, contributor_id),
   FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
-  FOREIGN KEY (contributor_id) REFERENCES contributors(id) ON DELETE CASCADE
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Indexes
+-- INDEXES (the ones that actually exist)
 CREATE INDEX idx_components_project_id ON components(project_id);
-CREATE INDEX idx_project_contributors_project ON project_contributors(project_id);
+CREATE INDEX idx_contributors_project_id ON contributors(project_id);
+CREATE INDEX idx_contributors_user_id ON contributors(user_id);
