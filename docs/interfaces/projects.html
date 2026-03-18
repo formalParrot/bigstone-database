@@ -1,51 +1,133 @@
 <!doctype html>
-
-<!-- messy but works -->
-<html>
+<html lang="en">
     <head>
-        <title>Create Projects</title>
+        <meta charset="UTF-8" />
+        <title>My Projects</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                padding: 20px;
+            }
+            input,
+            button {
+                margin: 5px;
+            }
+            li {
+                margin-bottom: 5px;
+            }
+        </style>
     </head>
     <body>
-        <h2>Create a Project</h2>
+        <h2>My Projects</h2>
 
-        <input
-            id="name"
-            placeholder="Project name"
-            maxlength="50"
-        /><br /><br />
-        <textarea id="desc" placeholder="Description" maxlength="200"></textarea
-        ><br /><br />
+        <form id="createForm">
+            <input type="text" id="name" placeholder="Project name" required />
+            <input
+                type="text"
+                id="desc"
+                placeholder="Project description"
+                required
+            />
+            <button type="submit">Create Project</button>
+        </form>
 
-        <button onclick="createProject()">Create</button>
+        <h3>Delete Project by ID</h3>
+        <form id="deleteForm">
+            <input
+                type="number"
+                id="deleteId"
+                placeholder="Project ID"
+                required
+            />
+            <button type="submit">Delete Project</button>
+        </form>
 
-        <pre id="output"></pre>
+        <h3>All Projects</h3>
+        <ul id="projectList"></ul>
+
+        <p id="message"></p>
 
         <script>
-            async function createProject() {
-                const name = document.getElementById("name").value;
-                const desc = document.getElementById("desc").value;
+            const API_URL = "https://bigstone-api.justparrot.workers.dev";
+            const token = localStorage.getItem("token");
+            const projectList = document.getElementById("projectList");
+            const message = document.getElementById("message");
 
-                try {
-                    const res = await fetch(
-                        "https://bigstone-api.justparrot.workers.dev/projects",
-                        {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ name, desc }),
-                        },
-                    );
+            async function fetchProjects() {
+                projectList.innerHTML = "";
+                const res = await fetch(`${API_URL}/projects`);
+                const projects = await res.json();
 
-                    const data = await res.json();
-
-                    const output = document.getElementById("output");
-                    output.textContent = await fetch(
-                        `https://bigstone-api.justparrot.workers.dev/projects/${data.id}`,
-                    );
-                } catch (err) {
-                    document.getElementById("output").textContent =
-                        "Error: " + err;
-                }
+                projects.forEach((p) => {
+                    const li = document.createElement("li");
+                    li.textContent = `ID: ${p.id} | Name: ${p.name} | Desc: ${p.desc} | Owner: ${p.owner_id}`;
+                    projectList.appendChild(li);
+                });
             }
+
+            // Create project
+            document
+                .getElementById("createForm")
+                .addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const name = document.getElementById("name").value;
+                    const desc = document.getElementById("desc").value;
+
+                    try {
+                        const res = await fetch(`${API_URL}/projects`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: "Bearer " + token,
+                            },
+                            body: JSON.stringify({ name, desc }),
+                        });
+
+                        if (res.ok) {
+                            const data = await res.json();
+                            message.textContent = `Project created with ID: ${data.id}`;
+                            fetchProjects();
+                        } else {
+                            const text = await res.text();
+                            message.textContent = "Error: " + text;
+                        }
+                    } catch (err) {
+                        message.textContent = "Network error";
+                    }
+                });
+
+            // Delete project
+            document
+                .getElementById("deleteForm")
+                .addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const id = document.getElementById("deleteId").value;
+
+                    try {
+                        const res = await fetch(
+                            `${API_URL}/projects/remove/${id}`,
+                            {
+                                method: "DELETE",
+                                headers: { Authorization: "Bearer " + token },
+                            },
+                        );
+
+                        if (res.ok) {
+                            const data = await res.json();
+                            message.textContent =
+                                data.string || "Deleted successfully";
+                            fetchProjects();
+                        } else {
+                            const text = await res.text();
+                            message.textContent = "Error: " + text;
+                        }
+                    } catch (err) {
+                        message.textContent = "Network error";
+                    }
+                });
+
+            // initial fetch
+            fetchProjects();
         </script>
     </body>
 </html>
