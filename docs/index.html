@@ -19,23 +19,23 @@
 
         <style>
             body {
-                font-family: Arial, sans-serif;
+                font-family: 'Segoe UI', Tahoma, sans-serif;
                 margin: 0;
-                background: #1e1e1e;
-                color: #fff;
+                background: #1b1b1d;
+                color: #fcfcfc;
                 overflow-x: hidden;
             }
 
             /* Header - to make it 3d */
             header {
-                background: #008da0;
-                padding: 60px 20px;
+                background: #008694;
+                padding: 55px 25px;
                 text-align: center;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 40px;
-                box-shadow: 0 10px 0 #006b7a;
+                gap: 45px;
+                box-shadow: 0 11px 0 #00626d;
                 position: relative;
                 overflow: hidden;
             }
@@ -52,40 +52,40 @@
 
             .floating-comp {
                 position: absolute;
-                width: 50px;
-                height: 50px;
+                width: 46px;
+                height: 46px;
                 object-fit: contain;
-                opacity: 0.4;
+                opacity: 0.36;
                 pointer-events: none;
                 z-index: 2;
             }
 
             input {
-                width: 60%;
-                padding: 14px 20px;
-                border-radius: 12px;
+                width: 63%;
+                padding: 16px 24px;
+                border-radius: 13px;
                 border: none;
                 outline: none;
-                background: #2b2b2b;
+                background: #29292b;
                 color: #fff;
-                font-size: 16px;
+                font-size: 15px;
                 box-shadow:
-                    inset 0 4px 8px rgba(0, 0, 0, 0.6),
-                    0 5px 0 #151515,
-                    0 10px 20px rgba(0, 0, 0, 0.4);
-                transition: all 0.1s ease;
-                transform: perspective(500px) rotateX(5deg);
+                    inset 0 4px 8px rgba(0, 0, 0, 0.52),
+                    0 5px 0 #111112,
+                    0 10px 22px rgba(0, 0, 0, 0.45);
+                transition: all 0.11s ease-in-out;
+                transform: perspective(500px) rotateX(4.5deg);
                 position: relative;
                 z-index: 10;
             }
 
             /* Search Bar  interaction thing */
             input:focus {
-                transform: perspective(500px) rotateX(0deg) translateY(3px);
+                transform: perspective(500px) rotateX(0deg) translateY(2px);
                 box-shadow:
                     inset 0 2px 4px rgba(0, 0, 0, 0.6),
-                    0 2px 0 #151515,
-                    0 5px 10px rgba(0, 0, 0, 0.5);
+                    0 2px 0 #111112,
+                    0 5px 12px rgba(0, 0, 0, 0.48);
             }
 
             /* 3d hovere  */
@@ -97,12 +97,14 @@
                 align-items: center;
                 z-index: 10;
             }
+            
             .hover-3d figure {
-                transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+                transition: transform 0.48s cubic-bezier(0.23, 0.63, 0.32, 1);
                 transform-style: preserve-3d;
                 margin: 0;
                 pointer-events: none;
             }
+            
             /* grid to detecd mouse */
             .hover-3d div {
                 position: absolute;
@@ -112,98 +114,43 @@
             }
 
             /* Positioning the 8 spawner */
-            .hover-3d div:nth-child(1) {
-                top: -25%;
-                left: -25%;
-            }
-            .hover-3d div:nth-child(2) {
-                top: -25%;
-                left: 25%;
-            }
-            .hover-3d div:nth-child(3) {
-                top: -25%;
-                left: 75%;
-            }
-            .hover-3d div:nth-child(4) {
-                top: 25%;
-                left: -25%;
-            }
-            .hover-3d div:nth-child(5) {
-                top: 25%;
-                left: 75%;
-            }
-            .hover-3d div:nth-child(6) {
-                top: 75%;
-                left: -25%;
-            }
-            .hover-3d div:nth-child(7) {
-                top: 75%;
-                left: 25%;
-            }
-            .hover-3d div:nth-child(8) {
-                top: 75%;
-                left: 75%;
-            }
+            .hover-3d div:nth-child(1) { top: -25%; left: -25%; }
+            .hover-3d div:nth-child(2) { top: -25%; left: 25%; }
+            .hover-3d div:nth-child(3) { top: -25%; left: 75%; }
+            .hover-3d div:nth-child(4) { top: 25%; left: -25%; }
+            .hover-3d div:nth-child(5) { top: 25%; left: 75%; }
+            .hover-3d div:nth-child(6) { top: 75%; left: -25%; }
+            .hover-3d div:nth-child(7) { top: 75%; left: 25%; }
+            .hover-3d div:nth-child(8) { top: 75%; left: 75%; }
 
             /* Rotates a bit - blocks */
-            .logo-container div:nth-child(1):hover ~ figure {
-                transform: rotateX(25deg) rotateY(-25deg);
-            }
-            .logo-container div:nth-child(2):hover ~ figure {
-                transform: rotateX(25deg);
-            }
-            .logo-container div:nth-child(3):hover ~ figure {
-                transform: rotateX(25deg) rotateY(25deg);
-            }
-            .logo-container div:nth-child(4):hover ~ figure {
-                transform: rotateY(-25deg);
-            }
-            .logo-container div:nth-child(5):hover ~ figure {
-                transform: rotateY(25deg);
-            }
-            .logo-container div:nth-child(6):hover ~ figure {
-                transform: rotateX(-25deg) rotateY(-25deg);
-            }
-            .logo-container div:nth-child(7):hover ~ figure {
-                transform: rotateX(-25deg);
-            }
-            .logo-container div:nth-child(8):hover ~ figure {
-                transform: rotateX(-25deg) rotateY(25deg);
-            }
+            .logo-container div:nth-child(1):hover ~ figure { transform: rotateX(23deg) rotateY(-23deg); }
+            .logo-container div:nth-child(2):hover ~ figure { transform: rotateX(23deg); }
+            .logo-container div:nth-child(3):hover ~ figure { transform: rotateX(23deg) rotateY(23deg); }
+            .logo-container div:nth-child(4):hover ~ figure { transform: rotateY(-23deg); }
+            .logo-container div:nth-child(5):hover ~ figure { transform: rotateY(23deg); }
+            .logo-container div:nth-child(6):hover ~ figure { transform: rotateX(-23deg) rotateY(-23deg); }
+            .logo-container div:nth-child(7):hover ~ figure { transform: rotateX(-23deg); }
+            .logo-container div:nth-child(8):hover ~ figure { transform: rotateX(-23deg) rotateY(23deg); }
 
             /* Rotate block */
-            .modal-3d-wrap div:nth-child(1):hover ~ figure {
-                transform: rotateX(15deg) rotateY(-15deg);
-            }
-            .modal-3d-wrap div:nth-child(2):hover ~ figure {
-                transform: rotateX(15deg);
-            }
-            .modal-3d-wrap div:nth-child(3):hover ~ figure {
-                transform: rotateX(15deg) rotateY(15deg);
-            }
-            .modal-3d-wrap div:nth-child(4):hover ~ figure {
-                transform: rotateY(-15deg);
-            }
-            .modal-3d-wrap div:nth-child(5):hover ~ figure {
-                transform: rotateY(15deg);
-            }
-            .modal-3d-wrap div:nth-child(6):hover ~ figure {
-                transform: rotateX(-15deg) rotateY(-15deg);
-            }
-            .modal-3d-wrap div:nth-child(7):hover ~ figure {
-                transform: rotateX(-15deg);
-            }
-            .modal-3d-wrap div:nth-child(8):hover ~ figure {
-                transform: rotateX(-15deg) rotateY(15deg);
-            }
-
+            .modal-3d-wrap div:nth-child(1):hover ~ figure { transform: rotateX(16deg) rotateY(-16deg); }
+            .modal-3d-wrap div:nth-child(2):hover ~ figure { transform: rotateX(16deg); }
+            .modal-3d-wrap div:nth-child(3):hover ~ figure { transform: rotateX(16deg) rotateY(16deg); }
+            .modal-3d-wrap div:nth-child(4):hover ~ figure { transform: rotateY(-16deg); }
+            .modal-3d-wrap div:nth-child(5):hover ~ figure { transform: rotateY(16deg); }
+            .modal-3d-wrap div:nth-child(6):hover ~ figure { transform: rotateX(-16deg) rotateY(-16deg); }
+            .modal-3d-wrap div:nth-child(7):hover ~ figure { transform: rotateX(-16deg); }
+            .modal-3d-wrap div:nth-child(8):hover ~ figure { transform: rotateX(-16deg) rotateY(16deg); }
+                /*(The changes were worth it) - Much smoother*/
             .logo-container {
-                width: 350px;
-                height: 140px;
+                width: 348px;
+                height: 142px;
             }
+            
             .logo-container figure img {
-                filter: drop-shadow(0 15px 10px rgba(0, 0, 0, 0.5));
-                height: 140px;
+                filter: drop-shadow(0 15px 12px rgba(0, 0, 0, 0.42));
+                height: 142px;
                 width: 100%;
                 object-fit: contain;
             }
@@ -211,115 +158,128 @@
             /* Grid layout thing */
             .grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-                gap: 35px;
-                padding: 40px;
+                grid-template-columns: repeat(auto-fill, minmax(228px, 1fr));
+                gap: 34px;
+                padding: 42px;
             }
 
             /* cool click animation, very cool, and tiny detail... */
             .card {
-                background: #2b2b2b;
-                border-radius: 16px;
-                padding: 20px;
+                background: #2c2c2f;
+                border-radius: 15px;
+                padding: 24px;
                 text-align: center;
                 box-shadow:
-                    0 8px 0 #151515,
-                    0 15px 25px rgba(0, 0, 0, 0.5);
+                    0 7px 0 #121214,
+                    0 16px 26px rgba(0, 0, 0, 0.48);
                 cursor: pointer;
-                transition: all 0.1s ease;
+                transition: transform 0.08s ease, box-shadow 0.08s ease;
             }
+            
             .card:active {
-                transform: translateY(4px);
+                transform: translateY(3px);
                 box-shadow:
-                    0 4px 0 #151515,
-                    0 8px 15px rgba(0, 0, 0, 0.5);
+                    0 4px 0 #121214,
+                    0 8px 14px rgba(0, 0, 0, 0.42);
             }
+            
             .card img {
-                width: 100px;
-                height: 100px;
+                width: 98px;
+                height: 98px;
                 object-fit: contain;
-                margin: 0 auto 15px auto;
+                margin: 0 auto 16px auto;
                 display: block;
-                filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.3));
+                filter: drop-shadow(0 5px 6px rgba(0, 0, 0, 0.28));
             }
+            
             .card h3 {
                 margin: 0 0 8px;
                 font-size: 18px;
+                font-weight: 600;
             }
+            
             .card p {
                 font-size: 13px;
-                color: #aaa;
+                color: #a2a2a2;
                 margin: 0;
             }
 
             /* Style */
             .uk-modal {
-                background: rgba(0, 0, 0, 0.85);
+                background: rgba(12, 12, 14, 0.86);
                 backdrop-filter: blur(8px);
             }
+            
             .custom-modal-dialog {
-                background: #222;
+                background: #242426;
                 border-radius: 24px;
                 box-shadow:
-                    0 20px 0 #111,
-                    0 40px 60px rgba(0, 0, 0, 0.7);
-                border: 1px solid #333;
-                padding: 50px 40px 40px 40px;
+                    0 18px 0 #0d0d0f,
+                    0 38px 58px rgba(0, 0, 0, 0.7);
+                border: 1px solid #343438;
+                padding: 52px 42px 42px 42px;
                 text-align: center;
             }
 
             .modal-3d-wrap {
-                width: 250px;
-                height: 250px;
-                margin: 0 auto 30px auto;
+                width: 245px;
+                height: 245px;
+                margin: 0 auto 32px auto;
             }
+            
             .modal-img {
-                width: 220px;
-                height: 220px;
+                width: 215px;
+                height: 215px;
                 object-fit: contain;
-                filter: drop-shadow(0 20px 20px rgba(0, 0, 0, 0.6));
+                filter: drop-shadow(0 22px 22px rgba(0, 0, 0, 0.58));
             }
+            
             .custom-close-btn {
                 position: absolute;
                 right: 25px;
-                top: 20px;
-                color: #666;
+                top: 22px;
+                color: #727272;
             }
+            
             .download-btn {
                 position: absolute;
-                right: 30px;
+                right: 32px;
                 bottom: 35px;
-                background: #008da0;
+                background: #008694;
                 color: #fff;
                 text-decoration: none;
-                padding: 8px 16px;
+                padding: 8px 18px;
                 border-radius: 8px;
                 font-size: 14px;
-                font-weight: bold;
-                box-shadow: 0 4px 0 #005f6b;
-                transition: all 0.1s ease;
+                font-weight: 700;
+                box-shadow: 0 4px 0 #005862;
+                transition: all 0.12s ease;
             }
+            
             .download-btn:active {
-                transform: translateY(4px);
-                box-shadow: 0 0px 0 #005f6b;
+                transform: translateY(3px);
+                box-shadow: 0 1px 0 #005862;
             }
+            
             .modal-body-content h2 {
-                color: #008da0;
-                margin: 0 0 20px 0;
+                color: #008694;
+                margin: 0 0 22px 0;
                 font-size: 32px;
-                text-shadow: 0 3px 0 rgba(0, 0, 0, 0.5);
+                text-shadow: 0 3px 0 rgba(0, 0, 0, 0.48);
             }
+            
             .modal-body-content h4 {
-                color: #555;
+                color: #4b4b4e;
                 text-transform: uppercase;
                 font-size: 11px;
                 letter-spacing: 2px;
-                margin: 20px 0 8px;
+                margin: 22px 0 8px;
                 text-align: left;
             }
+            
             .modal-body-content p {
                 line-height: 1.6;
-                color: #eee;
+                color: #f1f1f1;
                 margin: 0;
                 text-align: left;
             }
@@ -331,14 +291,15 @@
                 flex-wrap: wrap;
                 margin-top: 10px;
             }
+            
             .tag {
-                background: #333;
+                background: #2e2e32;
                 padding: 6px 12px;
                 border-radius: 6px;
-                font-family: monospace;
-                font-size: 13px;
-                color: #008da0;
-                box-shadow: 0 3px 0 #1a1a1a;
+                font-family: 'Consolas', monospace;
+                font-size: 12px;
+                color: #008694;
+                box-shadow: 0 3px 0 #161618;
             }
         </style>
     </head>
@@ -347,15 +308,8 @@
             <div class="particle-container" id="particles"></div>
 
             <div class="hover-3d logo-container">
-                <!--Hitbox for hovering-->
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
+                <div></div><div></div><div></div><div></div>
+                <div></div><div></div><div></div><div></div>
                 <figure><img class="logo" src="logo.png" alt="Logo" /></figure>
             </div>
 
@@ -368,177 +322,158 @@
             />
         </header>
 
-        <div class="grid" id="grid">
-            <div
-                class="card uk-card uk-card-default"
-                data-name="pulse extender"
-                tabindex="0"
-                role="button"
-                onclick="openModal('Pulse Extender', 'You power it and then the signal is extended as long as you set it in the top middle and you can also invert the signal by clicking on the button in the middle', '@_justParrot, @bobmat2011, @BastienA', 'component1.png', 'pulse_extender.zip')"
-            >
-                <img src="component1.png" />
-                <h3 class="uk-card-title">Pulse Extender</h3>
-                <p>Increases the duration of a redstone pulse.</p>
-            </div>
-
-            <div
-                class="card uk-card uk-card-default"
-                data-name="wireless transmitter"
-                tabindex="0"
-                role="button"
-                onclick="openModal('Wireless Transmitter', 'Transmitts a wireless signal.', '@bobmat2011', 'component2.png', 'wireless_transmitter.zip')"
-            >
-                <img src="component2.png" />
-                <h3 class="uk-card-title">Wireless Transmitter</h3>
-                <p>Transmitts a wireless signal.</p>
-            </div>
-        </div>
+        <div class="grid" id="grid"></div>
 
         <div id="compModal" uk-modal>
-            <div class="uk-modal-dialog uk-modal-body custom-modal-dialog">
-                <button
-                    class="uk-modal-close-default custom-close-btn"
-                    type="button"
-                    uk-close
-                ></button>
-                <a id="m-download" href="#" class="download-btn" download
-                    >Download</a
-                >
-
+            <div class="uk-modal-dialog custom-modal-dialog">
+                <button class="uk-modal-close-default custom-close-btn" type="button" uk-close></button>
+                <div class="modal-3d-wrap hover-3d">
+                    <div></div><div></div><div></div><div></div>
+                    <div></div><div></div><div></div><div></div>
+                    <figure><img id="m-img" src="" class="modal-img"></figure>
+                </div>
                 <div class="modal-body-content">
                     <h2 id="m-title"></h2>
-
-                    <div class="hover-3d modal-3d-wrap">
-                        <!--Hitbox for hovering-->
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <figure>
-                            <img
-                                id="m-img"
-                                class="modal-img"
-                                src=""
-                                alt="Component"
-                            />
-                        </figure>
-                    </div>
-
-                    <h4>Functionality</h4>
+                    <h4>Description</h4>
                     <p id="m-desc"></p>
-
-                    <h4>Contributors</h4>
+                    <h4>Owner</h4>
                     <div id="m-tags" class="tag-container"></div>
                 </div>
+                <a id="m-download" href="#" class="download-btn">Download</a>
             </div>
         </div>
 
         <script>
-            // Search blocks
-            function searchItems() {
-                let input = document
-                    .getElementById("search")
-                    .value.toLowerCase();
-                let cards = document.getElementsByClassName("card");
-                for (let i = 0; i < cards.length; i++) {
-                    let name = cards[i].getAttribute("data-name");
-                    cards[i].style.display = name.includes(input)
-                        ? "block"
-                        : "none";
+            const projectsData = [
+                {
+                    "id": "d94931c9239c6a8e0e2b630df1790b8c",
+                    "name": "Pulse Extender",
+                    "desc": "You power it and then the signal is extended as long as you set it in the top middle and you can also invert the signal by clicking on the button in the middle",
+                    "owner_id": "99165a036384252dcaf16bd84c040269",
+                    "created_at": "2026-03-18 19:16:56",
+                    "banner_url": "https://raw.githubusercontent.com/formalParrot/bigstone-database/fdb9eb94d5f06f1c083d7e0f493b02870fe08e7f/docs/component1.png"
+                },
+                {
+                    "id": "83624072f897beb5c9a249b6559bec77",
+                    "name": "Instant HEX Wire",
+                    "desc": "This is an instant wire that is actually symmetrical. Limelight's v1 was not.",
+                    "owner_id": "f897f4430464cb9e168d607f046cb44a",
+                    "created_at": "2026-03-18 19:37:34",
+                    "banner_url": null
                 }
+            ];
+
+            const fallbackGif = "img_fallback.gif";
+
+            function loadProjects() {
+                const grid = document.querySelector("#grid");
+                grid.innerHTML = "";
+
+                projectsData.forEach(function(project) {
+                    const card = document.createElement("div");
+                    card.className = "card uk-card uk-card-default";
+                    card.dataset.name = project.name.toLowerCase();
+
+                   const imgPath = project.banner_url || fallbackGif;
+                    const downloadUrl = `https://bigstone-api.justparrot.workers.dev/projects/${project.id}/download`;
+
+                    card.addEventListener('click', function() {
+                        openModal(project.name, project.desc, project.owner_id, imgPath, downloadUrl);
+                    });
+
+                    const words = project.desc.split(" ");
+                    const snippet = words.slice(0, 5).join(" ") + "...";
+
+             card.innerHTML = `
+            <img src="${imgPath}" alt="${project.name}" onerror="this.onerror=null; this.src='${fallbackGif}';" />
+            <h3 class="uk-card-title">${project.name}</h3>
+            <p>${snippet}</p>
+        `;
+                    
+                    grid.appendChild(card);
+                });
             }
 
-            // Modal
-            let lastFocusedElement = null;
+            function openModal(title, description, ownerId, imageUrl, downloadLink) {
+                document.querySelector("#m-title").textContent = title;
+                document.querySelector("#m-desc").textContent = description;
+                const modalImg = document.querySelector("#m-img");
+    modalImg.src = imageUrl;
+    modalImg.onerror = function() {
+        this.onerror = null;
+        this.src = fallbackGif;
+    };
+                document.querySelector("#m-download").href = downloadLink;
 
-            function openModal(t, d, c, i, dl) {
-                lastFocusedElement = document.activeElement;
-                document.getElementById("m-title").innerText = t;
-                document.getElementById("m-desc").innerText = d;
-                document.getElementById("m-img").src = i;
-                document.getElementById("m-download").href = dl;
+                const tagsContainer = document.querySelector("#m-tags");
+                tagsContainer.innerHTML = `<span class="tag">${ownerId}</span>`;
 
-                const tags = document.getElementById("m-tags");
-                tags.innerHTML = "";
-                c.split(",").forEach((p) => {
-                    let s = document.createElement("span");
-                    s.className = "tag";
-                    s.innerText = p.trim();
-                    tags.appendChild(s);
-                });
+                UIkit.modal(document.querySelector("#compModal")).show();
+            }
 
-                const modal = UIkit.modal(document.getElementById("compModal"));
+            // Search blocks
+            function searchItems() {
+                const searchTerm = document.querySelector("#search").value.toLowerCase();
+                const cards = document.querySelectorAll(".card");
                 
-                modal.$el.addEventListener('hidden', () => {
-                    if (lastFocusedElement) lastFocusedElement.focus();
+                cards.forEach(card => {
+                    const componentName = card.dataset.name;
+                    
+                    if (componentName.includes(searchTerm)) {
+                        card.style.display = "block";
+                    } else {
+                        card.style.display = "none";
+                    }
                 });
-                
-                modal.show();
             }
 
             // Create flying blocks
             function initFloatingIcons() {
-                const container = document.getElementById("particles");
-                const header = document.getElementById("mainHeader");
-                const images = [
-                    "component1.png",
-                    "component2.png",
-                    "component3.png",
-                    "component4.png",
-                ];
-                const count = 10;
+                const wrapper = document.querySelector("#particles");
+                const header = document.querySelector("#mainHeader");
+                const images = ["component1.png", "component2.png", "component3.png", "component4.png"];
+                
+                for (let i = 0; i < 12; i++) {
+                    const iconEl = document.createElement("img");
+                    const randomImage = images[Math.floor(Math.random() * images.length)];
+                    
+                    iconEl.src = randomImage;
+                    iconEl.className = "floating-comp";
 
-                for (let i = 0; i < count; i++) {
-                    const img = document.createElement("img");
-                    img.src = images[Math.floor(Math.random() * images.length)];
-                    img.className = "floating-comp";
+                    let posX = Math.random() * window.innerWidth;
+                    let posY = Math.random() * header.offsetHeight;
+                    let speedX = (Math.random() - 0.5) * 1.4;
+                    let speedY = (Math.random() - 0.5) * 1.4;
+                    let rotationDeg = Math.random() * 360;
+                    let rotationSpeed = (Math.random() - 0.5) * 1.8;
 
-                    // Random positions
-                    let x = Math.random() * window.innerWidth;
-                    let y = Math.random() * header.offsetHeight;
-                    let dx = (Math.random() - 0.5) * 1.5;
-                    let dy = (Math.random() - 0.5) * 1.5;
-                    let rot = Math.random() * 360;
-                    let rotSpeed = (Math.random() - 0.5) * 2;
+                    function animateIcon() {
+                        posX += speedX; 
+                        posY += speedY; 
+                        rotationDeg += rotationSpeed;
+                        
+                        if (posX > window.innerWidth + 50) posX = -50;
+                        if (posX < -50) posX = window.innerWidth + 50;
+                        if (posY > header.offsetHeight + 50) posY = -50;
+                        if (posY < -50) posY = header.offsetHeight + 50;
 
-                    // loop
-                    function animate() {
-                        x += dx;
-                        y += dy;
-                        rot += rotSpeed;
-                        // Screen scanninh thing
-                        if (x > window.innerWidth + 50) x = -50;
-                        if (x < -50) x = window.innerWidth + 50;
-                        if (y > header.offsetHeight + 50) y = -50;
-                        if (y < -50) y = header.offsetHeight + 50;
-
-                        img.style.left = x + "px";
-                        img.style.top = y + "px";
-                        img.style.transform = `rotate(${rot}deg)`;
-                        requestAnimationFrame(animate);
+                        iconEl.style.left = posX + "px";
+                        iconEl.style.top = posY + "px";
+                        iconEl.style.transform = `rotate(${rotationDeg}deg)`;
+                        
+                        requestAnimationFrame(animateIcon);
                     }
-
-                    container.appendChild(img);
-                    animate();
+                    
+                    wrapper.appendChild(iconEl);
+                    animateIcon();
                 }
             }
 
-            // Keyboard controls
-            document.querySelectorAll(".card").forEach(card => {
-                card.addEventListener("keydown", (e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        card.click();
-                    }
-                });
-            });
-
             // starts the obecxts
-            window.onload = initFloatingIcons;
+            window.addEventListener('load', function() {
+                initFloatingIcons();
+                loadProjects();
+            });
         </script>
     </body>
 </html>
