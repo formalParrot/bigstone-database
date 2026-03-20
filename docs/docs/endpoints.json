@@ -30,5 +30,34 @@
     "path": "/projects/remove/{ID}",
     "description": "Removes project via ID",
     "example": "fetch('http://localhost:8787/projects/remove/3', {\n  method: 'DELETE',\n  headers: { 'Content-Type': 'application/json' }\n})\n.then(res => res.json())"
+  },
+  {
+    "name": "Get User by ID",
+    "method": "GET",
+    "path": "/users/{ID}",
+    "description": "Get user data by ID (id, username, created_at, component creations).",
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/users/1')\n.then(res => res.json());"
+  },
+  {
+    "name": "Register User",
+    "method": "POST",
+    "path": "/auth/register",
+    "description": "Register a new user with username and password.",
+    "body": {
+      "username": "USERNAME",
+      "password": "PASSWORD"
+    },
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/auth/register', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({ username: 'user1', password: 'securepassword' })\n})\n.then(res => res.text())\n.then(data => console.log(data));"
+  },
+  {
+    "name": "Login User",
+    "method": "POST",
+    "path": "/auth/login",
+    "description": "Authenticate user and receive a JWT token.",
+    "body": {
+      "username": "USERNAME",
+      "password": "PASSWORD"
+    },
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/auth/login', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({ username: 'user1', password: 'securepassword' })\n})\n.then(res => res.json())\n.then(data => console.log(data.token));"
   }
 ]
