@@ -1,24 +1,55 @@
-// src/utils/auth.js
 import jwt from 'jsonwebtoken';
 
 export function createToken(payload, secret) {
-	// default 1 hour expiration
-	return jwt.sign(payload, secret, { algorithm: 'HS256', expiresIn: '1h' });
+	return jwt.sign(payload, secret, {
+		algorithm: 'HS256',
+		expiresIn: '1h',
+	});
 }
 
 export function verifyToken(token, secret) {
+	return jwt.verify(token, secret, {
+		algorithms: ['HS256'],
+	});
+}
+
+export async function requireAuth(request, secret) {
+	const auth = request.headers.get('Authorization');
+
+	if (!auth || !auth.startsWith('Bearer ')) {
+		throw new Error('No header');
+	}
+
+	const token = auth.slice(7);
+
 	try {
-		return jwt.verify(token, secret, { algorithms: ['HS256'] });
+		const decoded = jwt.verify(token, secret);
+		/* console.log('DECODED:', decoded); */
+		return decoded;
 	} catch (err) {
-		throw new Error(err.message);
+		/* console.log('JWT ERROR:', err.message); */
+		throw new Error('Unauthorized');
 	}
 }
 
-// middleware-style helper
-export async function requireAuth(request, secret) {
+/* export async function requireAuth(request, secret) {
 	const auth = request.headers.get('Authorization');
-	if (!auth) throw new Error('Unauthorized');
 
-	const token = auth.split(' ')[1];
-	return verifyToken(token, secret);
-}
+	if (!auth || !auth.startsWith('Bearer ')) {
+		throw new Error('Missing or invalid Authorization header');
+	}
+
+	const token = auth.slice(7);
+
+	try {
+		const decoded = verifyToken(token, secret);
+
+		if (!decoded || !decoded.id) {
+			throw new Error('Invalid token payload');
+		}
+
+		return decoded;
+	} catch (err) {
+		throw new Error('Unauthorized');
+	}
+} */

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Add Component</title>
+    </head>
+    <body>
+        <h1>Add Component</h1>
+        <form id="componentForm">
+            <label>
+                Project ID:
+                <input type="text" name="project_id" required />
+            </label>
+            <br />
+            <label>
+                Name:
+                <input type="text" name="name" required />
+            </label>
+            <br />
+            <label>
+                Description:
+                <input type="text" name="desc" />
+            </label>
+            <br />
+            <label>
+                Ports (comma-separated):
+                <input type="text" name="ports" />
+            </label>
+            <br />
+            <button type="submit">Add Component</button>
+        </form>
+
+        <h2>Response</h2>
+        <pre id="responseOutput"></pre>
+
+        <script>
+            const form = document.getElementById("componentForm");
+            const output = document.getElementById("responseOutput");
+
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+
+                // Convert ports to array if needed
+                if (data.ports) {
+                    data.ports = data.ports.split(",").map((p) => p.trim());
+                }
+
+                const token = localStorage.getItem("token"); // assuming your token is stored here
+
+                try {
+                    const res = await fetch(
+                        "http://localhost:7000/components",
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                            },
+                            body: JSON.stringify(data),
+                        },
+                    );
+
+                    const json = await res.json();
+                    output.textContent = JSON.stringify(json, null, 2);
+                } catch (err) {
+                    output.textContent = "Error: " + err.message;
+                }
+            });
+        </script>
+    </body>
+</html>
