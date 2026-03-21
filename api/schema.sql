@@ -39,7 +39,8 @@ CREATE TABLE components (
 
   owner_id TEXT NOT NULL,
 
-  FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+  FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
+  FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- COMPONENT DOWNLOADS
@@ -58,7 +59,8 @@ CREATE TABLE contributors (
   user_id TEXT NOT NULL,
 
   FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  UNIQUE(project_id, user_id)
 );
 
 -- INDEXES (the ones that actually exist)
