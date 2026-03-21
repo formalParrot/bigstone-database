@@ -38,41 +38,40 @@
             const output = document.getElementById("responseOutput");
 
             form.addEventListener("submit", async (e) => {
-                e.preventDefault();
+                e.preventDefault(); // stop page reload
 
                 const formData = new FormData(form);
                 const data = Object.fromEntries(formData.entries());
 
-                // Convert ports to array if needed
+                // clean ports
                 if (data.ports) {
                     data.ports = data.ports.split(",").map((p) => p.trim());
                 }
 
-                const token = localStorage.getItem("token"); // assuming your token is stored here
+                const token = localStorage.getItem("token");
 
                 try {
                     const res = await fetch(
-<<<<<<< HEAD
-                        "https://bigstone-api.justparrot.workers.dev/components/",
-=======
-                        "http://bigstone-api.justparrot.workers.dev/components",
->>>>>>> main
+                        "https://bigstone-api.justparrot.workers.dev/components",
                         {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
-<<<<<<< HEAD
-                                Authorization: `Bearer ${localStorage.getItem("token")}`,
-=======
                                 Authorization: `Bearer ${token}`,
->>>>>>> main
                             },
                             body: JSON.stringify(data),
                         },
                     );
 
                     const json = await res.json();
+
+                    // show response
                     output.textContent = JSON.stringify(json, null, 2);
+
+                    // ONLY reset if successful
+                    if (res.ok) {
+                        form.reset();
+                    }
                 } catch (err) {
                     output.textContent = "Error: " + err.message;
                 }

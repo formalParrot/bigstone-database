@@ -45,7 +45,7 @@ export async function handleComponents(request, env, corsHeaders) {
 			console.log(project);
 
 			/* 403 - project not found or not yours */
-			if (!project) {
+			if (!project || project.owner_id !== user.id) {
 				return new Response(JSON.stringify({ error: 'Project not found or not yours' }), {
 					status: 403,
 					headers: { 'Content-Type': 'application/json', ...corsHeaders },
