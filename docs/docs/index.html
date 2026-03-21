@@ -5,7 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Bigstone API Docs</title>
         <style>
-            /*Simple CHANGE*/
             body {
                 margin: 0;
                 font-family: Arial, sans-serif;
@@ -21,11 +20,10 @@
                 padding: 20px;
                 box-shadow: 10px 0 0 #006b7a;
                 overflow-y: auto;
-                
             }
             .sidebar h2 {
                 color: #003035;
-                margin-top: 5;
+                margin-top: 5px;
             }
             .endpoint-link {
                 display: block;
@@ -38,20 +36,19 @@
                 color: #004852;
             }
 
-             @keyframes glow {
-               0% {
-                
-            }
-             5% {
-                color: #fff;
-                text-shadow: 0 0 20px #00e5ff;
-                transform: scale(1.05);
-            }
+            @keyframes glow {
+                0% {
+                }
+                5% {
+                    color: #fff;
+                    text-shadow: 0 0 20px #00e5ff;
+                    transform: scale(1.05);
+                }
                 100% {
-                color: #00b3c6;
-                text-shadow: none;
-                transform: scale(1);
-               }
+                    color: #00b3c6;
+                    text-shadow: none;
+                    transform: scale(1);
+                }
             }
 
             .endpoint h2.highlight {
@@ -61,9 +58,9 @@
             }
 
             .endpoint h2 {
-            transition: all 0.3s ease;
-            display: inline-block;
-            transform-origin: left;
+                transition: all 0.3s ease;
+                display: inline-block;
+                transform-origin: left;
             }
             .sidebar-header {
                 display: flex;
@@ -82,9 +79,8 @@
                 width: 22px;
                 height: 22px;
                 display: block;
-
-                filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(140deg)
-                    brightness(100%) contrast(100%);
+                filter: invert(100%) sepia(100%) saturate(100%)
+                    hue-rotate(140deg) brightness(100%) contrast(100%);
             }
             .home-icon img:hover {
                 transform: scale(1.15);
@@ -106,7 +102,7 @@
                 color: #00b3c6;
             }
             .endpoint pre {
-                 background: #2b2b2b;
+                background: #2b2b2b;
                 border-radius: 16px;
                 padding: 20px;
                 box-shadow:
@@ -115,10 +111,27 @@
                 cursor: pointer;
                 transition: all 0.1s ease;
             }
+
+            /* Method colors */
             .method {
                 font-weight: bold;
-                color: #ffae42;
             }
+            .method.GET {
+                color: #4caf50;
+            } /* green */
+            .method.POST {
+                color: #ffae42;
+            } /* orange */
+            .method.PUT {
+                color: #2196f3;
+            } /* blue */
+            .method.DELETE {
+                color: #f44336;
+            } /* red */
+            .method.PATCH {
+                color: #9c27b0;
+            } /* purple */
+
             .copy-btn {
                 margin-top: 10px;
                 padding: 6px 12px;
@@ -161,7 +174,13 @@
             </div>
 
             <b><div id="sidebar-links"></div></b>
-            <a id="m-download" href="https://formalparrot.github.io/bigstone-database/interfaces/projects.html" class="addproject-btn" target="_blank">Test API</a>
+            <a
+                id="m-download"
+                href="https://formalparrot.github.io/bigstone-database/interfaces/projects.html"
+                class="addproject-btn"
+                target="_blank"
+                >Test API</a
+            >
         </div>
 
         <div class="content" id="content"></div>
@@ -180,12 +199,14 @@
                     link.className = "endpoint-link";
                     link.innerText = `${ep.method} ${ep.path}`;
                     link.onclick = () => {
-                        document.querySelectorAll(".endpoint h2").forEach(h2 => h2.classList.remove("highlight"));
-                        const targetSection = document.getElementById("ep-" + index);
-                        const targetTitle = targetSection.querySelector("h2");
                         document
-                            .getElementById("ep-" + index)
-                            .scrollIntoView({ behavior: "smooth" });
+                            .querySelectorAll(".endpoint h2")
+                            .forEach((h2) => h2.classList.remove("highlight"));
+                        const targetSection = document.getElementById(
+                            "ep-" + index,
+                        );
+                        const targetTitle = targetSection.querySelector("h2");
+                        targetSection.scrollIntoView({ behavior: "smooth" });
                         targetTitle.classList.remove("highlight");
                         void targetTitle.offsetWidth;
                         targetTitle.classList.add("highlight");
@@ -201,13 +222,16 @@
                         ? JSON.stringify(ep.body, null, 2)
                         : "";
                     section.innerHTML = `
-              <h2 style="display: inline-block;">${ep.name} <span class="method">[${ep.method}]</span></h2>
-              <p><code>${ep.path}</code></p>
-              <p>${ep.description}</p>
-              ${bodyCode ? `<h4>Request Body</h4><pre>${bodyCode}</pre>` : ""}
-              <h4>Fetch</h4>
-              <pre id="example-${index}">${ep.example}</pre>
-            `;
+                    <h2 style="display: inline-block;">
+                        ${ep.name}
+                        <span class="method ${ep.method}">[${ep.method}]</span>
+                    </h2>
+                    <p><code>${ep.path}</code></p>
+                    <p>${ep.description}</p>
+                    ${bodyCode ? `<h4>Request Body</h4><pre>${bodyCode}</pre>` : ""}
+                    <h4>Fetch</h4>
+                    <pre id="example-${index}">${ep.example}</pre>
+                `;
                     content.appendChild(section);
                 });
             }

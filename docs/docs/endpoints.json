@@ -34,7 +34,7 @@
   {
     "name": "Remove Project by ID",
     "method": "DELETE",
-    "path": "/projects/remove/{ID}",
+    "path": "/projects/{ID}",
     "description": "Removes project via ID",
     "example": "fetch('http://localhost:8787/projects/remove/3', {\n  method: 'DELETE',\n  headers: { 'Content-Type': 'application/json' }\n})\n.then(res => res.json())"
   },
@@ -66,5 +66,38 @@
       "password": "PASSWORD"
     },
     "example": "fetch('https://bigstone-api.justparrot.workers.dev/auth/login', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({ username: 'user1', password: 'securepassword' })\n})\n.then(res => res.json())\n.then(data => console.log(data.token));"
+  },
+  {
+    "name": "Create Component",
+    "method": "POST",
+    "path": "/components",
+    "description": "Create a new component for a project. Requires authentication and project ownership.",
+    "body": {
+      "project_id": "PROJECT ID",
+      "name": "COMPONENT NAME",
+      "desc": "DESCRIPTION (optional)"
+    },
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/components', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer YOUR_TOKEN' },\n  body: JSON.stringify({ project_id: '123', name: 'Resistor', desc: '220 Ohm' })\n})\n.then(res => res.json())\n.then(data => console.log(data))\n.catch(err => console.error(err));"
+  },
+  {
+    "name": "Get All Components",
+    "method": "GET",
+    "path": "/components",
+    "description": "Retrieve all components from the database.",
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/components')\n.then(res => res.json())\n.then(data => console.log(data))\n.catch(err => console.error(err));"
+  },
+  {
+    "name": "Get Component By ID",
+    "method": "GET",
+    "path": "/components/{id}",
+    "description": "Retrieve a single component by its ID.",
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/components/COMPONENT_ID')\n.then(res => res.json())\n.then(data => console.log(data))\n.catch(err => console.error(err));"
+  },
+  {
+    "name": "Delete Component",
+    "method": "DELETE",
+    "path": "/components/{id}",
+    "description": "Delete a component by ID. Requires authentication and component ownership.",
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/components/COMPONENT_ID', {\n  method: 'DELETE',\n  headers: { 'Authorization': 'Bearer YOUR_TOKEN' }\n})\n.then(res => res.json())\n.then(data => console.log(data))\n.catch(err => console.error(err));"
   }
 ]
