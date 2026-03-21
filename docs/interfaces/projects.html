@@ -96,17 +96,16 @@
                         removeBtn.textContent = "Remove";
                         removeBtn.addEventListener("click", async () => {
                             // DELETE contributor by username
-                            await fetch(`${API_URL}/contributors`, {
-                                method: "DELETE",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                    Authorization: "Bearer " + token,
+                            await fetch(
+                                `${API_URL}/contributors/${p.id}/${c.id}`,
+                                {
+                                    method: "DELETE",
+                                    headers: { Authorization: "Bearer " },
                                 },
-                                body: JSON.stringify({
-                                    project_id: p.id,
-                                    username: c.username,
-                                }),
-                            });
+                            )
+                                .then((res) => res.text())
+                                .then((data) => console.log(data))
+                                .catch((err) => console.error(err));
                             fetchProjects();
                         });
 
