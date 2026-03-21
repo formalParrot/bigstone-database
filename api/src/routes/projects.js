@@ -8,7 +8,7 @@ export async function handleProjects(request, env, corsHeaders) {
 	if (request.method === 'POST' && path === '/projects') {
 		const user = await requireAuth(request, env.JWT_SECRET);
 
-		cons.t { name, desc } = await request.json();
+		const { name, desc } = await request.json();
 
 		const result = await env.DB.prepare('INSERT INTO projects (name, desc, owner_id) VALUES (?, ?, ?)').bind(name, desc, user.id).run();
 
