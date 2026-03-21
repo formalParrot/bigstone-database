@@ -37,6 +37,8 @@ CREATE TABLE components (
   dim_y INTEGER,
   dim_z INTEGER,
 
+  owner_id TEXT NOT NULL,
+
   FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
 );
 

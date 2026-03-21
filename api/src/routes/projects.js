@@ -35,7 +35,7 @@ export async function handleProjects(request, env, corsHeaders) {
 	}
 
 	/* DELETE methods */
-	if (request.method === 'DELETE' && path.startsWith('/projects/remove/')) {
+	if (request.method === 'DELETE') {
 		const user = await requireAuth(request, env.JWT_SECRET);
 
 		const id = path.split('/').pop();

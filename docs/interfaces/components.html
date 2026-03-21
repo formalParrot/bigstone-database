@@ -52,12 +52,20 @@
 
                 try {
                     const res = await fetch(
+<<<<<<< HEAD
+                        "https://bigstone-api.justparrot.workers.dev/components/",
+=======
                         "http://bigstone-api.justparrot.workers.dev/components",
+>>>>>>> main
                         {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
+<<<<<<< HEAD
+                                Authorization: `Bearer ${localStorage.getItem("token")}`,
+=======
                                 Authorization: `Bearer ${token}`,
+>>>>>>> main
                             },
                             body: JSON.stringify(data),
                         },
