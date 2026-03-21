@@ -1,8 +1,9 @@
 import { handleProjects } from './routes/projects.js';
 import { handleAuth } from './routes/auth.js';
 import { handleUsers } from './routes/users.js';
-/*
 import { handleComponents } from './routes/components.js';
+
+/*
 import { handleContributors } from './routes/contributors.js';
 */
 
@@ -42,6 +43,10 @@ export default {
 
 		if (url.pathname.startsWith(`/users`)) {
 			return handleUsers(request, env, corsHeaders);
+		}
+
+		if (url.pathname.startsWith(`/components`)) {
+			return handleComponents(request, env, corsHeaders);
 		}
 
 		/*
