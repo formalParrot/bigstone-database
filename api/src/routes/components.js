@@ -86,6 +86,15 @@ export async function handleComponents(request, env, corsHeaders) {
 		return new Response(JSON.stringify(result), { headers: { 'Content-Type': 'application/json', ...corsHeaders } });
 	}
 
+	// DELETE
+	if (request.method === 'DELETE' && path.startsWith('/components/')) {
+		const user = await requireAuth(request, env.JWT_SECRET);
+		const id = path.split('/').pop();
+
+		await env.DB.prepare('DELETE FROM components WHERE id = ? AND owner_id = ?').bind(id, user.id).run();
+
+		return new Response(JSON.stringify({ success: true }), { headers: { 'Content-Type': 'application/json', ...corsHeaders } });
+	}
 	// unsupported routes
 	return new Response('Not found', { status: 404, headers: corsHeaders });
 }
