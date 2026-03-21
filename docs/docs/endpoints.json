@@ -27,7 +27,7 @@
   {
     "name": "Remove Project by ID",
     "method": "DELETE",
-    "path": "/projects/remove/{ID}",
+    "path": "/projects/{ID}",
     "description": "Removes project via ID",
     "example": "fetch('http://localhost:8787/projects/remove/3', {\n  method: 'DELETE',\n  headers: { 'Content-Type': 'application/json' }\n})\n.then(res => res.json())"
   },
