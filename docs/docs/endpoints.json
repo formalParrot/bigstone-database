@@ -53,6 +53,13 @@
     "example": "fetch('https://bigstone-api.justparrot.workers.dev/users/1')\n.then(res => res.json());"
   },
   {
+    "name": "Get Your Own User Info",
+    "method": "GET",
+    "path": "/users/me",
+    "description": "Get user data by requesting with authentication headers. Only your own data, e.g. for the profile page.",
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/users/me')\n.then(res => res.json());"
+  },
+  {
     "name": "Register User",
     "method": "POST",
     "path": "/auth/register",
