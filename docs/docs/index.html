@@ -194,47 +194,97 @@
                 const sidebar = document.getElementById("sidebar-links");
                 const content = document.getElementById("content");
 
-                endpoints.forEach((ep, index) => {
-                    // Sidebar link
-                    const link = document.createElement("a");
-                    link.className = "endpoint-link";
-                    link.innerText = `${ep.method} ${ep.path}`;
-                    link.onclick = () => {
-                        document
-                            .querySelectorAll(".endpoint h2")
-                            .forEach((h2) => h2.classList.remove("highlight"));
-                        const targetSection = document.getElementById(
-                            "ep-" + index,
-                        );
-                        const targetTitle = targetSection.querySelector("h2");
-                        targetSection.scrollIntoView({ behavior: "smooth" });
-                        targetTitle.classList.remove("highlight");
-                        void targetTitle.offsetWidth;
-                        targetTitle.classList.add("highlight");
-                    };
-                    sidebar.appendChild(link);
+                function groupByBasePath(endpoints) {
+                    const groups = {};
 
-                    // Content section
-                    const section = document.createElement("div");
-                    section.className = "endpoint";
-                    section.id = "ep-" + index;
+                    endpoints.forEach((ep) => {
+                        let base = ep.path.split("/")[1] || "other";
 
-                    let bodyCode = ep.body
-                        ? JSON.stringify(ep.body, null, 2)
-                        : "";
-                    section.innerHTML = `
-                    <h2 style="display: inline-block;">
-                        ${ep.name}
-                        <span class="method ${ep.method}">[${ep.method}]</span>
-                    </h2>
-                    <p><code>${ep.path}</code></p>
-                    <p>${ep.description}</p>
-                    ${bodyCode ? `<h4>Request Body</h4><pre>${bodyCode}</pre>` : ""}
-                    <h4>Fetch</h4>
-                    <pre id="example-${index}">${ep.example}</pre>
-                `;
-                    content.appendChild(section);
-                });
+                        if (!groups[base]) {
+                            groups[base] = [];
+                        }
+
+                        groups[base].push(ep);
+                    });
+
+                    return groups;
+                }
+
+                const grouped = groupByBasePath(endpoints);
+
+                Object.entries(grouped).forEach(
+                    ([groupName, groupEndpoints]) => {
+                        // Sidebar group title
+                        const groupTitle = document.createElement("h3");
+                        groupTitle.innerText = groupName.toUpperCase();
+                        sidebar.appendChild(groupTitle);
+
+                        // Content group title
+                        const contentGroupTitle = document.createElement("h1");
+                        contentGroupTitle.innerText = groupName.toUpperCase();
+                        content.appendChild(contentGroupTitle);
+
+                        groupEndpoints.forEach((ep, index) => {
+                            const globalIndex = `${groupName}-${index}`;
+
+                            // Sidebar link
+                            const link = document.createElement("a");
+                            link.className = "endpoint-link";
+                            link.innerText = `${ep.method} ${ep.path}`;
+                            link.onclick = () => {
+                                document
+                                    .querySelectorAll(".endpoint h2")
+                                    .forEach((h2) =>
+                                        h2.classList.remove("highlight"),
+                                    );
+
+                                const targetSection = document.getElementById(
+                                    "ep-" + globalIndex,
+                                );
+
+                                const targetTitle =
+                                    targetSection.querySelector("h2");
+
+                                targetSection.scrollIntoView({
+                                    behavior: "smooth",
+                                });
+
+                                targetTitle.classList.remove("highlight");
+                                void targetTitle.offsetWidth;
+                                targetTitle.classList.add("highlight");
+                            };
+
+                            sidebar.appendChild(link);
+
+                            // Endpoint section
+                            const section = document.createElement("div");
+                            section.className = "endpoint";
+                            section.id = "ep-" + globalIndex;
+
+                            let bodyCode = ep.body
+                                ? JSON.stringify(ep.body, null, 2)
+                                : "";
+
+                            section.innerHTML = `
+                            <h2>
+                                ${ep.name}
+                                <span class="method ${ep.method}">[${ep.method}]</span>
+                            </h2>
+                            <p><code>${ep.path}</code></p>
+                            <p>${ep.description}</p>
+                            ${
+                                bodyCode
+                                    ? `<h4>Request Body</h4><pre>${bodyCode}</pre>`
+                                    : ""
+                            }
+                            <h4>Fetch</h4>
+                            <pre id="example-${globalIndex}">${ep.example}</pre>
+                        `;
+
+                            content.appendChild(section);
+                        });
+                    },
+                );
             }
 
             loadEndpoints();
