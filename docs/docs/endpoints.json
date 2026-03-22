@@ -2,74 +2,60 @@
   {
     "name": "Create Project",
     "method": "POST",
-    "path": "/projects/",
-    "description": "Create a new project with name and description.",
+    "path": "/projects",
+    "description": "Create a new project with name and description. Requires authentication.",
     "body": {
       "name": "PROJECT NAME",
       "desc": "DESCRIPTION"
     },
-    "example": "fetch('https://bigstone-api.justparrot.workers.dev/projects/', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({ name: 'My Project', desc: 'Project description' })\n})\n.then(res => res.json())\n.then(data => console.log(data))\n.catch(err => console.error(err));"
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/projects', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer YOUR_TOKEN' },\n  body: JSON.stringify({ name: 'My Project', desc: 'Project description' })\n})\n.then(res => res.json())\n.then(data => console.log(data))\n.catch(err => console.error(err));"
   },
   {
     "name": "List Projects",
     "method": "GET",
-    "path": "/projects/",
+    "path": "/projects",
     "description": "Get a list of all projects.",
-    "example": "fetch('https://bigstone-api.justparrot.workers.dev/projects/')\n.then(res => res.json());"
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/projects')\n.then(res => res.json())\n.then(data => console.log(data));"
   },
   {
-    "name": "List Project by ID",
+    "name": "Get Project by ID",
     "method": "GET",
     "path": "/projects/{ID}",
-    "description": "Get all project data by ID",
-    "example": "fetch('https://bigstone-api.justparrot.workers.dev/projects/1/')\n.then(res => res.json());"
+    "description": "Retrieve a single project by its ID.",
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/projects/1')\n.then(res => res.json());"
   },
   {
-    "name": "List Components by Project ID",
+    "name": "Get Components by Project ID",
     "method": "GET",
     "path": "/projects/{ID}/components",
-    "description": "Get all components that belong to a project using the project ID",
+    "description": "Retrieve all components for a specific project.",
     "example": "fetch('https://bigstone-api.justparrot.workers.dev/projects/1/components')\n.then(res => res.json());"
   },
   {
-    "name": "List Contributors by Project ID",
+    "name": "Get Contributors by Project ID",
     "method": "GET",
     "path": "/projects/{ID}/contributors",
-    "description": "Get all contributors that belong to a project using the project ID",
+    "description": "Retrieve all contributors for a specific project.",
     "example": "fetch('https://bigstone-api.justparrot.workers.dev/projects/1/contributors')\n.then(res => res.json());"
   },
   {
-    "name": "Remove Project by ID",
+    "name": "Delete Project",
     "method": "DELETE",
     "path": "/projects/{ID}",
-    "description": "Removes project via ID",
-    "example": "fetch('http://bigstone-api.justparrot.workers.dev/projects/remove/3', {\n  method: 'DELETE',\n  headers: { 'Content-Type': 'application/json' }\n})\n.then(res => res.json())"
-  },
-  {
-    "name": "Get User by ID",
-    "method": "GET",
-    "path": "/users/{ID}",
-    "description": "Get user data by ID (id, username, created_at, component creations).",
-    "example": "fetch('https://bigstone-api.justparrot.workers.dev/users/1')\n.then(res => res.json());"
-  },
-  {
-    "name": "Get Your Own User Info",
-    "method": "GET",
-    "path": "/users/me",
-    "description": "Get user data by requesting with authentication headers. Only your own data, e.g. for the profile page.",
-    "example": "fetch('https://bigstone-api.justparrot.workers.dev/users/me')\n.then(res => res.json());"
+    "description": "Delete a project by ID. Requires authentication and ownership.",
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/projects/1', {\n  method: 'DELETE',\n  headers: { 'Authorization': 'Bearer YOUR_TOKEN' }\n})\n.then(res => res.json());"
   },
   {
     "name": "Register User",
     "method": "POST",
     "path": "/auth/register",
-    "description": "Register a new user with username and password.",
+    "description": "Register a new user with username, password, and consent.",
     "body": {
       "username": "USERNAME",
       "password": "PASSWORD",
       "consent": true
     },
-    "example": "fetch('https://bigstone-api.justparrot.workers.dev/auth/register', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({ username: 'user1', password: 'securepassword' })\n})\n.then(res => res.text())\n.then(data => console.log(data));"
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/auth/register', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({ username: 'user1', password: 'securepassword', consent: true })\n})\n.then(res => res.text())\n.then(data => console.log(data));"
   },
   {
     "name": "Login User",
@@ -92,59 +78,87 @@
       "name": "COMPONENT NAME",
       "desc": "DESCRIPTION (optional)"
     },
-    "example": "fetch('https://bigstone-api.justparrot.workers.dev/components', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer YOUR_TOKEN' },\n  body: JSON.stringify({ project_id: '123', name: 'Resistor', desc: '220 Ohm' })\n})\n.then(res => res.json())\n.then(data => console.log(data))\n.catch(err => console.error(err));"
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/components', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer YOUR_TOKEN' },\n  body: JSON.stringify({ project_id: '123', name: 'Resistor', desc: '220 Ohm' })\n})\n.then(res => res.json());"
   },
   {
-    "name": "Get All Components",
+    "name": "List Components",
     "method": "GET",
     "path": "/components",
     "description": "Retrieve all components from the database.",
-    "example": "fetch('https://bigstone-api.justparrot.workers.dev/components')\n.then(res => res.json())\n.then(data => console.log(data))\n.catch(err => console.error(err));"
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/components')\n.then(res => res.json());"
   },
   {
-    "name": "Get Component By ID",
+    "name": "Get Component by ID",
     "method": "GET",
-    "path": "/components/{id}",
+    "path": "/components/{ID}",
     "description": "Retrieve a single component by its ID.",
-    "example": "fetch('https://bigstone-api.justparrot.workers.dev/components/COMPONENT_ID')\n.then(res => res.json())\n.then(data => console.log(data))\n.catch(err => console.error(err));"
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/components/1')\n.then(res => res.json());"
   },
   {
     "name": "Delete Component",
     "method": "DELETE",
-    "path": "/components/{id}",
-    "description": "Delete a component by ID. Requires authentication and component ownership.",
-    "example": "fetch('https://bigstone-api.justparrot.workers.dev/components/COMPONENT_ID', {\n  method: 'DELETE',\n  headers: { 'Authorization': 'Bearer YOUR_TOKEN' }\n})\n.then(res => res.json())\n.then(data => console.log(data))\n.catch(err => console.error(err));"
+    "path": "/components/{ID}",
+    "description": "Delete a component by ID. Requires authentication and ownership.",
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/components/1', {\n  method: 'DELETE',\n  headers: { 'Authorization': 'Bearer YOUR_TOKEN' }\n})\n.then(res => res.json());"
   },
   {
     "name": "Add Contributor",
     "method": "POST",
     "path": "/contributors",
-    "description": "Adds a new contributor to a project. Only the project owner can add contributors.",
+    "description": "Add a new contributor to a project. Only project owner can add.",
     "body": {
-      "project_id": "string",
-      "username": "string"
+      "project_id": "PROJECT ID",
+      "username": "USERNAME"
     },
-    "example": "fetch('https://bigstone-api.justparrot.workers.dev/contributors', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({ project_id: 'abc123', username: 'john_doe' })\n})\n.then(res => res.json())\n.then(data => console.log(data))\n.catch(err => console.error(err));"
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/contributors', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer YOUR_TOKEN' },\n  body: JSON.stringify({ project_id: '123', username: 'john_doe' })\n})\n.then(res => res.json());"
   },
   {
-    "name": "Get All Contributors",
+    "name": "List Contributors",
     "method": "GET",
     "path": "/contributors",
-    "description": "Fetches a list of all contributors across all projects.",
-    "example": "fetch('https://bigstone-api.justparrot.workers.dev/contributors')\n.then(res => res.json())\n.then(data => console.log(data))\n.catch(err => console.error(err));"
+    "description": "Fetch all contributors across all projects.",
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/contributors')\n.then(res => res.json());"
   },
   {
     "name": "Get User Contributors",
     "method": "GET",
     "path": "/contributors/{user_id}",
-    "description": "Fetches all contributions for a specific user by their user ID.",
-    "example": "fetch('https://bigstone-api.justparrot.workers.dev/contributors/1e39ab5d6c2f6bf1530aa3248534908a')\n.then(res => res.json())\n.then(data => console.log(data))\n.catch(err => console.error(err));"
+    "description": "Fetch all contributions for a specific user by their ID.",
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/contributors/1')\n.then(res => res.json());"
   },
   {
     "name": "Remove Contributor",
     "method": "DELETE",
     "path": "/contributors/{project_id}/{user_id}",
-    "description": "Removes a contributor from a project. Only the project owner can remove contributors.",
-    "example": "fetch('https://bigstone-api.justparrot.workers.dev/contributors/abc123/1e39ab5d6c2f6bf1530aa3248534908a', {\n  method: 'DELETE',\n  headers: { 'Authorization': 'Bearer <JWT_TOKEN>' }\n})\n.then(res => res.text())\n.then(data => console.log(data))\n.catch(err => console.error(err));"
+    "description": "Remove a contributor from a project. Only project owner can remove.",
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/contributors/123/1', {\n  method: 'DELETE',\n  headers: { 'Authorization': 'Bearer YOUR_TOKEN' }\n})\n.then(res => res.text());"
+  },
+  {
+    "name": "Get Current User Info",
+    "method": "GET",
+    "path": "/users/me",
+    "description": "Get your own user info. Requires authentication.",
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/users/me', {\n  headers: { 'Authorization': 'Bearer YOUR_TOKEN' }\n}).then(res => res.json());"
+  },
+  {
+    "name": "Export Current User Data",
+    "method": "GET",
+    "path": "/users/me/export",
+    "description": "Export all data related to the current user (projects, components, contributors).",
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/users/me/export', {\n  headers: { 'Authorization': 'Bearer YOUR_TOKEN' }\n}).then(res => res.json());"
+  },
+  {
+    "name": "Delete Current User",
+    "method": "DELETE",
+    "path": "/users/me",
+    "description": "Delete your own account. Requires authentication.",
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/users/me', {\n  method: 'DELETE',\n  headers: { 'Authorization': 'Bearer YOUR_TOKEN' }\n});"
+  },
+  {
+    "name": "Get User by ID",
+    "method": "GET",
+    "path": "/users/{ID}",
+    "description": "Get user info by ID.",
+    "example": "fetch('https://bigstone-api.justparrot.workers.dev/users/1')\n.then(res => res.json());"
   }
 ]
