@@ -410,10 +410,10 @@
                     <h2 id="m-title"></h2>
                     <h4>Description</h4>
                     <p id="m-desc"></p>
-                    <h4>Owner</h4>
+                    <h4>Owner & Contributors</h4>
                     <div id="m-tags" class="tag-container"></div>
                 </div>
-                <a id="m-download" href="#" class="download-btn">Download</a>
+                <!--Download Button Removed for now-->
             </div>
         </div>
 
@@ -435,6 +435,8 @@
                     console.log(projectsData);
 
                     loadProjects();
+
+                    initFloatingIcons();
                 } catch (error) {
                     console.error("Fetch error:", error);
                 }
@@ -494,7 +496,7 @@
                     this.src = fallbackGif;
                 };
 
-                document.querySelector("#m-download").href = downloadLink;
+                // document.querySelector("#m-download").href = downloadLink;
 
                 const tagsContainer = document.querySelector("#m-tags");
 
@@ -536,19 +538,21 @@
                 });
             }
 
-            // Create flying blocks
             function initFloatingIcons() {
                 const wrapper = document.querySelector("#particles");
                 const header = document.querySelector("#mainHeader");
-                const images = [
-                    "component1.png",
-                    "component2.png",
-                    "component3.png",
-                    "component4.png",
-                ];
+
+                const images = projectsData
+                    .map((p) => p.banner_url)
+                    .filter(Boolean);
+
+                if (images.length === 0) {
+                    images.push("img_fallback.gif");
+                }
 
                 for (let i = 0; i < 12; i++) {
                     const iconEl = document.createElement("img");
+
                     const randomImage =
                         images[Math.floor(Math.random() * images.length)];
 
@@ -586,7 +590,6 @@
 
             // starts the obecxts
             window.addEventListener("load", function () {
-                initFloatingIcons();
                 init();
             });
         </script>
