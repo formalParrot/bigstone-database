@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>BIGSTONE</title>
 
+        <!-- Franken UI -->
         <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/franken-ui@2.1.2/dist/css/core.min.css"
@@ -18,7 +19,83 @@
         <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.6/dist/js/uikit-icons.min.js"></script>
 
         <link rel="stylesheet" href="./assets/css/styles.css" />
+
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            .login-btn {
+                position: absolute;
+                right: 30px;
+                top: 30px;
+                background: #008680;
+                color: #fff;
+                border: none;
+                padding: 10px 18px;
+                border-radius: 10px;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                box-shadow: 0 5px 0 #005862;
+                transition: all 0.12s ease;
+            }
+            .login-btn:active {
+                transform: translateY(3px);
+                box-shadow: 0 2px 0 #005862;
+            }
+            .login-btn:hover {
+                filter: brightness(1.1);
+            }
+
+            .auth-form {
+                display: flex;
+                flex-direction: column;
+                gap: 14px;
+                margin-top: 20px;
+            }
+            .auth-form input,
+            .auth-form select {
+                width: 100%;
+                padding: 12px;
+                border-radius: 10px;
+                border: none;
+                background: #29292b;
+                color: white;
+            }
+            .auth-form button {
+                margin-top: 10px;
+                background: #008680;
+                border: none;
+                padding: 12px;
+                border-radius: 10px;
+                color: white;
+                font-weight: 600;
+                cursor: pointer;
+                box-shadow: 0 5px 0 #005862;
+            }
+            .auth-form button:active {
+                transform: translateY(3px);
+                box-shadow: 0 2px 0 #005862;
+            }
+
+            #message {
+                font-size: 13px;
+                color: #ff6b6b;
+                min-height: 18px;
+                text-align: center;
+            }
+
+            .consent {
+                font-size: 13px;
+                color: #aaa;
+            }
+            .consent a {
+                color: #008680;
+            }
+        </style>
     </head>
+
     <body class="uk-background-background uk-text-foreground">
         <header id="mainHeader">
             <div class="particle-container" id="particles"></div>
@@ -35,6 +112,11 @@
                 <figure><img class="logo" src="logo.png" alt="Logo" /></figure>
             </div>
 
+            <!-- Fixed button target -->
+            <button class="login-btn" uk-toggle="target: #loginModal">
+                Login
+            </button>
+
             <input
                 class="uk-input"
                 type="text"
@@ -46,6 +128,7 @@
 
         <div class="grid" id="grid"></div>
 
+        <!-- Component Modal -->
         <div id="compModal" uk-modal>
             <div class="uk-modal-dialog custom-modal-dialog">
                 <button
@@ -71,9 +154,177 @@
                     <h4>Owner & Contributors</h4>
                     <div id="m-tags" class="tag-container"></div>
                 </div>
-                <!-- <a id="m-download" href="#" class="download-btn">Download</a> -->
             </div>
         </div>
+
+        <!-- LOGIN MODAL -->
+        <div id="loginModal" uk-modal>
+            <div class="uk-modal-dialog custom-modal-dialog">
+                <button
+                    class="uk-modal-close-default custom-close-btn"
+                    type="button"
+                    uk-close
+                ></button>
+                <div class="modal-body-content">
+                    <h2>Login</h2>
+                    <form id="loginForm" class="auth-form">
+                        <input
+                            type="text"
+                            id="login-username"
+                            placeholder="Username"
+                            required
+                        />
+                        <input
+                            type="password"
+                            id="login-password"
+                            placeholder="Password"
+                            required
+                        />
+                        <button type="submit">Login</button>
+                        <p id="login-message"></p>
+                        <p style="font-size: 12px; margin-top: 10px">
+                            No account?
+                            <a
+                                href="#"
+                                uk-toggle="target: #registerModal; animation: uk-animation-fade"
+                                >Register</a
+                            >
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- REGISTER MODAL -->
+        <div id="registerModal" uk-modal>
+            <div class="uk-modal-dialog custom-modal-dialog">
+                <button
+                    class="uk-modal-close-default custom-close-btn"
+                    type="button"
+                    uk-close
+                ></button>
+                <div class="modal-body-content">
+                    <h2>Register</h2>
+                    <form id="registerForm" class="auth-form">
+                        <input
+                            type="text"
+                            id="register-username"
+                            placeholder="Username"
+                            required
+                        />
+                        <input
+                            type="password"
+                            id="register-password"
+                            placeholder="Password"
+                            required
+                        />
+                        <label class="consent">
+                            <input type="checkbox" required />
+                            I agree to the
+                            <a href="/privacy.html" target="_blank"
+                                >Privacy Policy</a
+                            >
+                        </label>
+                        <button type="submit">Register</button>
+                        <p id="register-message"></p>
+                        <p style="font-size: 12px; margin-top: 10px">
+                            Already have an account?
+                            <a
+                                href="#"
+                                uk-toggle="target: #loginModal; animation: uk-animation-fade"
+                                >Login</a
+                            >
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const API_URL = "https://bigstone-api.justparrot.workers.dev";
+
+            // LOGIN FORM
+            const loginForm = document.getElementById("loginForm");
+            const loginMessage = document.getElementById("login-message");
+            loginForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const username = document
+                    .getElementById("login-username")
+                    .value.trim();
+                const password =
+                    document.getElementById("login-password").value;
+                loginMessage.textContent = "Logging in...";
+                try {
+                    const res = await fetch(API_URL + "/auth/login", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username, password }),
+                    });
+                    if (!res.ok) {
+                        loginMessage.textContent = await res.text();
+                        return;
+                    }
+                    const data = await res.json();
+                    localStorage.setItem("token", data.token);
+                    loginMessage.style.color = "#00ff90";
+                    loginMessage.textContent = "Logged in successfully!";
+                    UIkit.modal("#loginModal").hide();
+                } catch {
+                    loginMessage.textContent = "Network error";
+                }
+            });
+
+            // REGISTER FORM
+            const registerForm = document.getElementById("registerForm");
+            const registerMessage = document.getElementById("register-message");
+            registerForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const username = document
+                    .getElementById("register-username")
+                    .value.trim();
+                const password =
+                    document.getElementById("register-password").value;
+                const consent = registerForm.querySelector(
+                    "input[type=checkbox]",
+                ).checked;
+                if (!consent) {
+                    registerMessage.textContent =
+                        "You must agree to the Privacy Policy.";
+                    return;
+                }
+                registerMessage.textContent = "Registering...";
+                try {
+                    const res = await fetch(API_URL + "/auth/register", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username, password }),
+                    });
+                    if (!res.ok) {
+                        registerMessage.textContent = await res.text();
+                        return;
+                    }
+
+                    // Auto-login after register
+                    const loginRes = await fetch(API_URL + "/auth/login", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username, password }),
+                    });
+                    if (!loginRes.ok) {
+                        registerMessage.textContent =
+                            "Registered, but login failed";
+                        return;
+                    }
+                    const data = await loginRes.json();
+                    localStorage.setItem("token", data.token);
+                    registerMessage.style.color = "#00ff90";
+                    registerMessage.textContent = "Registered and logged in!";
+                    UIkit.modal("#registerModal").hide();
+                } catch {
+                    registerMessage.textContent = "Network error";
+                }
+            });
+        </script>
 
         <script src="./assets/js/script.js"></script>
     </body>

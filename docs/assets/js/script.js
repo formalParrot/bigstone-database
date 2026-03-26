@@ -20,7 +20,7 @@ async function init() {
   }
 }
 
-const fallbackGif = "/bigstone-database/assets/gifs/img_fallback.gif";
+const fallbackGif = "/assets/assets/img_fallback.gif";
 
 function loadProjects() {
   const grid = document.querySelector("#grid");
