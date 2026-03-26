@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bigstone API Docs</title>
+        <style>
+            body {
+                margin: 0;
+                font-family: Arial, sans-serif;
+                display: flex;
+                height: 100vh;
+                background: #1e1e1e;
+                color: #fff;
+            }
+
+            .sidebar {
+                width: 250px;
+                background: #008da0;
+                padding: 20px;
+                box-shadow: 10px 0 0 #006b7a;
+                overflow-y: auto;
+            }
+            .sidebar h2 {
+                color: #003035;
+                margin-top: 5px;
+            }
+            .endpoint-link {
+                display: block;
+                color: #000000;
+                text-decoration: none;
+                margin: 8px 0;
+                cursor: pointer;
+            }
+            .endpoint-link:hover {
+                color: #004852;
+            }
+
+            @keyframes glow {
+                0% {
+                }
+                5% {
+                    color: #fff;
+                    text-shadow: 0 0 20px #00e5ff;
+                    transform: scale(1.05);
+                }
+                100% {
+                    color: #00b3c6;
+                    text-shadow: none;
+                    transform: scale(1);
+                }
+            }
+
+            .endpoint h2.highlight {
+                animation: glow 1.5s ease-out;
+                animation-delay: 0.3s;
+                animation-fill-mode: backwards;
+            }
+
+            .endpoint h2 {
+                transition: all 0.3s ease;
+                display: inline-block;
+                transform-origin: left;
+            }
+            .sidebar-header {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin: 0;
+            }
+
+            .home-icon {
+                top: 1%;
+                display: flex;
+                align-items: center;
+            }
+
+            .home-icon img {
+                width: 22px;
+                height: 22px;
+                display: block;
+                filter: invert(100%) sepia(100%) saturate(100%)
+                    hue-rotate(140deg) brightness(100%) contrast(100%);
+            }
+            .home-icon img:hover {
+                transform: scale(1.15);
+            }
+            .home-icon:hover {
+                transform: scale(1.2);
+            }
+
+            .content {
+                flex: 1;
+                padding: 40px;
+                overflow-y: auto;
+            }
+            .endpoint {
+                margin-bottom: 40px;
+            }
+            .endpoint h2 {
+                margin: 0 0 10px;
+                color: #00b3c6;
+            }
+            .endpoint pre {
+                background: #2b2b2b;
+                border-radius: 16px;
+                padding: 20px;
+                box-shadow:
+                    0 8px 0 #151515,
+                    0 15px 25px rgba(0, 0, 0, 0.5);
+                cursor: pointer;
+                transition: all 0.1s ease;
+            }
+
+            /* Method colors */
+            .method {
+                font-weight: bold;
+            }
+            .method.GET {
+                color: #4caf50;
+            } /* green */
+            .method.POST {
+                color: #ffae42;
+            } /* orange */
+            .method.PUT {
+                color: #2196f3;
+            } /* blue */
+            .method.DELETE {
+                color: #f44336;
+            } /* red */
+            .method.PATCH {
+                color: #9c27b0;
+            } /* purple */
+
+            .copy-btn {
+                margin-top: 10px;
+                padding: 6px 12px;
+                background: #008da0;
+                border: none;
+                border-radius: 6px;
+                color: #fff;
+                cursor: pointer;
+            }
+            .copy-btn:active {
+                transform: translateY(2px);
+            }
+            .addproject-btn {
+                position: absolute;
+                right: 30px;
+                top: 25px;
+                background: #008da0;
+                color: #fff;
+                text-decoration: none;
+                padding: 8px 16px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: bold;
+                box-shadow: 0 4px 0 #005f6b;
+                transition: all 0.1s ease;
+            }
+            .addproject-btn:active {
+                transform: translateY(4px);
+                box-shadow: 0 0px 0 #005f6b;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <a href="/bigstone-database/" class="home-icon" title="Home">
+                    <img src="home.png" alt="Home" />
+                </a>
+                <h2>Endpoints</h2>
+            </div>
+
+            <b><div id="sidebar-links"></div></b>
+            <a
+                id="m-download"
+                href="https://formalparrot.github.io/bigstone-database/interfaces/projects.html"
+                class="addproject-btn"
+                target="_blank"
+                >Test API</a
+            >
+            <!-- <p>THESE DO NOT INCLUDE AUTHENTICATION HEADERS!!!</p> -->
+        </div>
+
+        <div class="content" id="content"></div>
+
+        <script>
+            async function loadEndpoints() {
+                const res = await fetch("endpoints.json?v=" + Date.now());
+                const endpoints = await res.json();
+
+                const sidebar = document.getElementById("sidebar-links");
+                const content = document.getElementById("content");
+
+                function groupByBasePath(endpoints) {
+                    const groups = {};
+
+                    endpoints.forEach((ep) => {
+                        let base = ep.path.split("/")[1] || "other";
+
+                        if (!groups[base]) {
+                            groups[base] = [];
+                        }
+
+                        groups[base].push(ep);
+                    });
+
+                    return groups;
+                }
+
+                const grouped = groupByBasePath(endpoints);
+
+                Object.entries(grouped).forEach(
+                    ([groupName, groupEndpoints]) => {
+                        // Sidebar group title
+                        const groupTitle = document.createElement("h3");
+                        groupTitle.innerText = groupName.toUpperCase();
+                        sidebar.appendChild(groupTitle);
+
+                        // Content group title
+                        const contentGroupTitle = document.createElement("h1");
+                        contentGroupTitle.innerText = groupName.toUpperCase();
+                        content.appendChild(contentGroupTitle);
+
+                        groupEndpoints.forEach((ep, index) => {
+                            const globalIndex = `${groupName}-${index}`;
+
+                            // Sidebar link
+                            const link = document.createElement("a");
+                            link.className = "endpoint-link";
+                            link.innerText = `${ep.method} ${ep.path}`;
+                            link.onclick = () => {
+                                document
+                                    .querySelectorAll(".endpoint h2")
+                                    .forEach((h2) =>
+                                        h2.classList.remove("highlight"),
+                                    );
+
+                                const targetSection = document.getElementById(
+                                    "ep-" + globalIndex,
+                                );
+
+                                const targetTitle =
+                                    targetSection.querySelector("h2");
+
+                                targetSection.scrollIntoView({
+                                    behavior: "smooth",
+                                });
+
+                                targetTitle.classList.remove("highlight");
+                                void targetTitle.offsetWidth;
+                                targetTitle.classList.add("highlight");
+                            };
+
+                            sidebar.appendChild(link);
+
+                            // Endpoint section
+                            const section = document.createElement("div");
+                            section.className = "endpoint";
+                            section.id = "ep-" + globalIndex;
+
+                            let bodyCode = ep.body
+                                ? JSON.stringify(ep.body, null, 2)
+                                : "";
+
+                            section.innerHTML = `
+                            <h2>
+                                ${ep.name}
+                                <span class="method ${ep.method}">[${ep.method}]</span>
+                            </h2>
+                            <p><code>${ep.path}</code></p>
+                            <p>${ep.description}</p>
+                            ${
+                                bodyCode
+                                    ? `<h4>Request Body</h4><pre>${bodyCode}</pre>`
+                                    : ""
+                            }
+                            <h4>Fetch</h4>
+                            <pre id="example-${globalIndex}">${ep.example}</pre>
+                        `;
+
+                            content.appendChild(section);
+                        });
+                    },
+                );
+            }
+
+            loadEndpoints();
+        </script>
+    </body>
+</html>

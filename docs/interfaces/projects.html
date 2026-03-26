@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>My Projects</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                padding: 20px;
+            }
+            input,
+            button {
+                margin: 5px;
+            }
+            li {
+                margin-bottom: 15px;
+            }
+            .contributors {
+                margin-left: 20px;
+                list-style: disc;
+            }
+            .contributor {
+                display: flex;
+                align-items: center;
+            }
+            .contributor button {
+                margin-left: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>My Projects</h2>
+
+        <form id="createForm">
+            <input type="text" id="name" placeholder="Project name" required />
+            <input
+                type="text"
+                id="desc"
+                placeholder="Project description"
+                required
+            />
+            <button type="submit">Create Project</button>
+        </form>
+
+        <h3>Delete Project by ID</h3>
+        <form id="deleteForm">
+            <input
+                type="text"
+                id="deleteId"
+                placeholder="Project ID"
+                required
+            />
+            <button type="submit">Delete Project</button>
+        </form>
+
+        <h3>All Projects</h3>
+        <ul id="projectList"></ul>
+        <p id="message"></p>
+
+        <script>
+            const API_URL = "https://bigstone-api.justparrot.workers.dev";
+            const token = localStorage.getItem("token");
+            const projectList = document.getElementById("projectList");
+
+            async function fetchProjects() {
+                projectList.innerHTML = "";
+                const res = await fetch(`${API_URL}/projects`, {
+                    headers: { Authorization: "Bearer " + token },
+                });
+                const projects = await res.json();
+
+                for (const p of projects) {
+                    const li = document.createElement("li");
+                    li.innerHTML = `<strong>${p.name}</strong> (ID: ${p.id})<br>${p.desc}<br>Owner: ${p.owner_id}`;
+
+                    // --- Contributors list ---
+                    const contribList = document.createElement("ul");
+                    contribList.className = "contributors";
+                    li.appendChild(contribList);
+
+                    // Fetch contributors using /projects/<id>/contributors
+                    const cRes = await fetch(
+                        `${API_URL}/projects/${p.id}/contributors`,
+                        {
+                            headers: { Authorization: "Bearer " + token },
+                        },
+                    );
+                    const contributors = await cRes.json();
+
+                    contributors.forEach((c) => {
+                        const cLi = document.createElement("li");
+                        cLi.className = "contributor";
+                        cLi.textContent = c.username;
+
+                        const removeBtn = document.createElement("button");
+                        removeBtn.textContent = "Remove";
+                        removeBtn.addEventListener("click", async () => {
+                            // DELETE contributor using project_id and user_id
+                            await fetch(
+                                `${API_URL}/contributors/${p.id}/${c.user_id}`,
+                                {
+                                    method: "DELETE",
+                                    headers: {
+                                        Authorization: "Bearer " + token,
+                                    },
+                                },
+                            );
+                            fetchProjects();
+                        });
+
+                        cLi.appendChild(removeBtn);
+                        contribList.appendChild(cLi);
+                    });
+
+                    // --- Form to add contributor ---
+                    const addForm = document.createElement("form");
+                    addForm.innerHTML = `
+            <input type="text" name="username" placeholder="Username to add" required />
+            <button type="submit">Add Contributor</button>
+        `;
+                    addForm.addEventListener("submit", async (e) => {
+                        e.preventDefault();
+                        const username = e.target.username.value;
+
+                        await fetch(`${API_URL}/contributors`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: "Bearer " + token,
+                            },
+                            body: JSON.stringify({
+                                project_id: p.id,
+                                username,
+                            }),
+                        });
+
+                        fetchProjects();
+                    });
+
+                    li.appendChild(addForm);
+                    projectList.appendChild(li);
+                }
+            }
+
+            // --- Create project ---
+            document
+                .getElementById("createForm")
+                .addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const name = document.getElementById("name").value;
+                    const desc = document.getElementById("desc").value;
+
+                    await fetch(`${API_URL}/projects`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: "Bearer " + token,
+                        },
+                        body: JSON.stringify({ name, desc }),
+                    });
+
+                    fetchProjects();
+                });
+
+            // --- Delete project ---
+            document
+                .getElementById("deleteForm")
+                .addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const id = document.getElementById("deleteId").value;
+
+                    await fetch(`${API_URL}/projects/${id}`, {
+                        method: "DELETE",
+                        headers: { Authorization: "Bearer " + token },
+                    });
+
+                    fetchProjects();
+                });
+
+            // Initial load
+            fetchProjects();
+        </script>
+    </body>
+</html>

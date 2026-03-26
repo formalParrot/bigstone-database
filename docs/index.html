@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en" class="dark">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>BIGSTONE</title>
+
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/franken-ui@2.1.2/dist/css/core.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/franken-ui@2.1.2/dist/css/utilities.min.css"
+        />
+
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.6/dist/js/uikit.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.6/dist/js/uikit-icons.min.js"></script>
+
+        <style>
+            body {
+                font-family: "Segoe UI", Tahoma, sans-serif;
+                margin: 0;
+                background: #1b1b1d;
+                color: #fcfcfc;
+                overflow-x: hidden;
+            }
+
+            /* Header - to make it 3d */
+            header {
+                background: #008694;
+                padding: 55px 25px;
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 45px;
+                box-shadow: 0 11px 0 #00626d;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .particle-container {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 1;
+                pointer-events: none;
+            }
+
+            .floating-comp {
+                position: absolute;
+                width: 46px;
+                height: 46px;
+                object-fit: contain;
+                opacity: 0.36;
+                pointer-events: none;
+                z-index: 2;
+            }
+
+            input {
+                width: 63%;
+                padding: 16px 24px;
+                border-radius: 13px;
+                border: none;
+                outline: none;
+                background: #29292b;
+                color: #fff;
+                font-size: 15px;
+                box-shadow:
+                    inset 0 4px 8px rgba(0, 0, 0, 0.52),
+                    0 5px 0 #111112,
+                    0 10px 22px rgba(0, 0, 0, 0.45);
+                transition: all 0.11s ease-in-out;
+                transform: perspective(500px) rotateX(4.5deg);
+                position: relative;
+                z-index: 10;
+            }
+
+            /* Search Bar  interaction thing */
+            input:focus {
+                transform: perspective(500px) rotateX(0deg) translateY(2px);
+                box-shadow:
+                    inset 0 2px 4px rgba(0, 0, 0, 0.6),
+                    0 2px 0 #111112,
+                    0 5px 12px rgba(0, 0, 0, 0.48);
+            }
+
+            /* 3d hovere  */
+            .hover-3d {
+                position: relative;
+                display: flex;
+                perspective: 1000px;
+                justify-content: center;
+                align-items: center;
+                z-index: 10;
+            }
+
+            .hover-3d figure {
+                transition: transform 0.48s cubic-bezier(0.23, 0.63, 0.32, 1);
+                transform-style: preserve-3d;
+                margin: 0;
+                pointer-events: none;
+            }
+
+            /* grid to detecd mouse */
+            .hover-3d div {
+                position: absolute;
+                z-index: 5;
+                width: 50%;
+                height: 50%;
+            }
+
+            /* Positioning the 8 spawner */
+            .hover-3d div:nth-child(1) {
+                top: -25%;
+                left: -25%;
+            }
+            .hover-3d div:nth-child(2) {
+                top: -25%;
+                left: 25%;
+            }
+            .hover-3d div:nth-child(3) {
+                top: -25%;
+                left: 75%;
+            }
+            .hover-3d div:nth-child(4) {
+                top: 25%;
+                left: -25%;
+            }
+            .hover-3d div:nth-child(5) {
+                top: 25%;
+                left: 75%;
+            }
+            .hover-3d div:nth-child(6) {
+                top: 75%;
+                left: -25%;
+            }
+            .hover-3d div:nth-child(7) {
+                top: 75%;
+                left: 25%;
+            }
+            .hover-3d div:nth-child(8) {
+                top: 75%;
+                left: 75%;
+            }
+
+            /* Rotates a bit - blocks */
+            .logo-container div:nth-child(1):hover ~ figure {
+                transform: rotateX(23deg) rotateY(-23deg);
+            }
+            .logo-container div:nth-child(2):hover ~ figure {
+                transform: rotateX(23deg);
+            }
+            .logo-container div:nth-child(3):hover ~ figure {
+                transform: rotateX(23deg) rotateY(23deg);
+            }
+            .logo-container div:nth-child(4):hover ~ figure {
+                transform: rotateY(-23deg);
+            }
+            .logo-container div:nth-child(5):hover ~ figure {
+                transform: rotateY(23deg);
+            }
+            .logo-container div:nth-child(6):hover ~ figure {
+                transform: rotateX(-23deg) rotateY(-23deg);
+            }
+            .logo-container div:nth-child(7):hover ~ figure {
+                transform: rotateX(-23deg);
+            }
+            .logo-container div:nth-child(8):hover ~ figure {
+                transform: rotateX(-23deg) rotateY(23deg);
+            }
+
+            /* Rotate block */
+            .modal-3d-wrap div:nth-child(1):hover ~ figure {
+                transform: rotateX(16deg) rotateY(-16deg);
+            }
+            .modal-3d-wrap div:nth-child(2):hover ~ figure {
+                transform: rotateX(16deg);
+            }
+            .modal-3d-wrap div:nth-child(3):hover ~ figure {
+                transform: rotateX(16deg) rotateY(16deg);
+            }
+            .modal-3d-wrap div:nth-child(4):hover ~ figure {
+                transform: rotateY(-16deg);
+            }
+            .modal-3d-wrap div:nth-child(5):hover ~ figure {
+                transform: rotateY(16deg);
+            }
+            .modal-3d-wrap div:nth-child(6):hover ~ figure {
+                transform: rotateX(-16deg) rotateY(-16deg);
+            }
+            .modal-3d-wrap div:nth-child(7):hover ~ figure {
+                transform: rotateX(-16deg);
+            }
+            .modal-3d-wrap div:nth-child(8):hover ~ figure {
+                transform: rotateX(-16deg) rotateY(16deg);
+            }
+            /*(The changes were worth it) - Much smoother*/
+            .logo-container {
+                width: 348px;
+                height: 142px;
+            }
+
+            .logo-container figure img {
+                filter: drop-shadow(0 15px 12px rgba(0, 0, 0, 0.42));
+                height: 142px;
+                width: 100%;
+                object-fit: contain;
+            }
+
+            /* Grid layout thing */
+            .grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(228px, 1fr));
+                gap: 34px;
+                padding: 42px;
+            }
+
+            /* cool click animation, very cool, and tiny detail... */
+            .card {
+                background: #2c2c2f;
+                border-radius: 15px;
+                padding: 24px;
+                text-align: center;
+                box-shadow:
+                    0 7px 0 #121214,
+                    0 16px 26px rgba(0, 0, 0, 0.48);
+                cursor: pointer;
+                transition:
+                    transform 0.08s ease,
+                    box-shadow 0.08s ease;
+            }
+
+            .card:active {
+                transform: translateY(3px);
+                box-shadow:
+                    0 4px 0 #121214,
+                    0 8px 14px rgba(0, 0, 0, 0.42);
+            }
+
+            .card img {
+                width: 98px;
+                height: 98px;
+                object-fit: contain;
+                margin: 0 auto 16px auto;
+                display: block;
+                filter: drop-shadow(0 5px 6px rgba(0, 0, 0, 0.28));
+            }
+
+            .card h3 {
+                margin: 0 0 8px;
+                font-size: 18px;
+                font-weight: 600;
+            }
+
+            .card p {
+                font-size: 13px;
+                color: #a2a2a2;
+                margin: 0;
+            }
+
+            /* Style */
+            .uk-modal {
+                background: rgba(12, 12, 14, 0.86);
+                backdrop-filter: blur(8px);
+            }
+
+            .custom-modal-dialog {
+                background: #242426;
+                border-radius: 24px;
+                box-shadow:
+                    0 18px 0 #0d0d0f,
+                    0 38px 58px rgba(0, 0, 0, 0.7);
+                border: 1px solid #343438;
+                padding: 52px 42px 42px 42px;
+                text-align: center;
+            }
+
+            .modal-3d-wrap {
+                width: 245px;
+                height: 245px;
+                margin: 0 auto 32px auto;
+            }
+
+            .modal-img {
+                width: 215px;
+                height: 215px;
+                object-fit: contain;
+                filter: drop-shadow(0 22px 22px rgba(0, 0, 0, 0.58));
+            }
+
+            .custom-close-btn {
+                position: absolute;
+                right: 25px;
+                top: 22px;
+                color: #727272;
+            }
+
+            .download-btn {
+                position: absolute;
+                right: 32px;
+                bottom: 35px;
+                background: #008694;
+                color: #fff;
+                text-decoration: none;
+                padding: 8px 18px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 700;
+                box-shadow: 0 4px 0 #005862;
+                transition: all 0.12s ease;
+            }
+
+            .download-btn:active {
+                transform: translateY(3px);
+                box-shadow: 0 1px 0 #005862;
+            }
+
+            .modal-body-content h2 {
+                color: #008694;
+                margin: 0 0 22px 0;
+                font-size: 32px;
+                text-shadow: 0 3px 0 rgba(0, 0, 0, 0.48);
+            }
+
+            .modal-body-content h4 {
+                color: #4b4b4e;
+                text-transform: uppercase;
+                font-size: 11px;
+                letter-spacing: 2px;
+                margin: 22px 0 8px;
+                text-align: left;
+            }
+
+            .modal-body-content p {
+                line-height: 1.6;
+                color: #f1f1f1;
+                margin: 0;
+                text-align: left;
+            }
+
+            /* Tag chips for contributors */
+            .tag-container {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+                margin-top: 10px;
+            }
+
+            .tag {
+                background: #2e2e32;
+                padding: 6px 12px;
+                border-radius: 6px;
+                font-family: "Consolas", monospace;
+                font-size: 12px;
+                color: #008694;
+                box-shadow: 0 3px 0 #161618;
+            }
+        </style>
+    </head>
+    <body class="uk-background-background uk-text-foreground">
+        <header id="mainHeader">
+            <div class="particle-container" id="particles"></div>
+
+            <div class="hover-3d logo-container">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <figure><img class="logo" src="logo.png" alt="Logo" /></figure>
+            </div>
+
+            <input
+                class="uk-input"
+                type="text"
+                id="search"
+                placeholder="Search components..."
+                onkeyup="searchItems()"
+            />
+        </header>
+
+        <div class="grid" id="grid"></div>
+
+        <div id="compModal" uk-modal>
+            <div class="uk-modal-dialog custom-modal-dialog">
+                <button
+                    class="uk-modal-close-default custom-close-btn"
+                    type="button"
+                    uk-close
+                ></button>
+                <div class="modal-3d-wrap hover-3d">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <figure><img id="m-img" src="" class="modal-img" /></figure>
+                </div>
+                <div class="modal-body-content">
+                    <h2 id="m-title"></h2>
+                    <h4>Description</h4>
+                    <p id="m-desc"></p>
+                    <h4>Owner & Contributors</h4>
+                    <div id="m-tags" class="tag-container"></div>
+                </div>
+            <!--Download Button Removed for now-->
+            </div>
+        </div>
+
+        <script>
+            let projectsData = [];
+
+            async function init() {
+                try {
+                    const response = await fetch(
+                        "https://bigstone-api.justparrot.workers.dev/projects/",
+                    );
+                    if (!response.ok) {
+                        throw new Error(
+                            `HTTP error! status: ${response.status}`,
+                        );
+                    }
+
+                    projectsData = await response.json();
+                    console.log(projectsData);
+
+                    loadProjects();
+                } catch (error) {
+                    console.error("Fetch error:", error);
+                }
+            }
+
+            const fallbackGif = "img_fallback.gif";
+
+            function loadProjects() {
+                const grid = document.querySelector("#grid");
+                grid.innerHTML = "";
+
+                projectsData.forEach(function (project) {
+                    const card = document.createElement("div");
+                    card.className = "card uk-card uk-card-default";
+                    card.dataset.name = project.name.toLowerCase();
+
+                    const imgPath = project.banner_url || fallbackGif;
+                    const downloadUrl = `https://bigstone-api.justparrot.workers.dev/projects/${project.id}/download`;
+
+                    card.addEventListener("click", function () {
+                        openModal(
+                            project.name,
+                            project.desc,
+                            project.owner_id,
+                            imgPath,
+                            downloadUrl,
+                        );
+                    });
+
+                    const words = project.desc.split(" ");
+                    const snippet = words.slice(0, 5).join(" ") + "...";
+
+                    card.innerHTML = `
+                <img src="${imgPath}" alt="${project.name}" onerror="this.onerror=null; this.src='${fallbackGif}';" />
+                <h3 class="uk-card-title">${project.name}</h3>
+                <p>${snippet}</p>
+            `;
+
+                    grid.appendChild(card);
+                });
+            }
+
+            async function openModal(
+                title,
+                description,
+                ownerId,
+                imageUrl,
+                downloadLink,
+            ) {
+                document.querySelector("#m-title").textContent = title;
+                document.querySelector("#m-desc").textContent = description;
+
+                const modalImg = document.querySelector("#m-img");
+                modalImg.src = imageUrl;
+                modalImg.onerror = function () {
+                    this.onerror = null;
+                    this.src = fallbackGif;
+                };
+
+                document.querySelector("#m-download").href = downloadLink;
+
+                const tagsContainer = document.querySelector("#m-tags");
+
+                // temp. placeholder
+                tagsContainer.innerHTML = `<span class="tag">Loading...</span>`;
+
+                try {
+                    const res = await fetch(
+                        `https://bigstone-api.justparrot.workers.dev/users/${ownerId}`,
+                    );
+                    const user = await res.json();
+
+                    tagsContainer.innerHTML = `
+                        <span class="tag">${user.username}</span>
+                    `;
+                } catch (err) {
+                    tagsContainer.innerHTML = `<span class="tag">Unknown</span>`;
+                    console.error(err);
+                }
+
+                UIkit.modal(document.querySelector("#compModal")).show();
+            }
+
+            // Search blocks
+            function searchItems() {
+                const searchTerm = document
+                    .querySelector("#search")
+                    .value.toLowerCase();
+                const cards = document.querySelectorAll(".card");
+
+                cards.forEach((card) => {
+                    const componentName = card.dataset.name;
+
+                    if (componentName.includes(searchTerm)) {
+                        card.style.display = "block";
+                    } else {
+                        card.style.display = "none";
+                    }
+                });
+            }
+
+            // Create flying blocks
+            function initFloatingIcons() {
+                const wrapper = document.querySelector("#particles");
+                const header = document.querySelector("#mainHeader");
+                const images = [
+                    "component1.png",
+                    "component2.png",
+                    "component3.png",
+                    "component4.png",
+                ];
+
+                for (let i = 0; i < 12; i++) {
+                    const iconEl = document.createElement("img");
+                    const randomImage =
+                        images[Math.floor(Math.random() * images.length)];
+
+                    iconEl.src = randomImage;
+                    iconEl.className = "floating-comp";
+
+                    let posX = Math.random() * window.innerWidth;
+                    let posY = Math.random() * header.offsetHeight;
+                    let speedX = (Math.random() - 0.5) * 1.4;
+                    let speedY = (Math.random() - 0.5) * 1.4;
+                    let rotationDeg = Math.random() * 360;
+                    let rotationSpeed = (Math.random() - 0.5) * 1.8;
+
+                    function animateIcon() {
+                        posX += speedX;
+                        posY += speedY;
+                        rotationDeg += rotationSpeed;
+
+                        if (posX > window.innerWidth + 50) posX = -50;
+                        if (posX < -50) posX = window.innerWidth + 50;
+                        if (posY > header.offsetHeight + 50) posY = -50;
+                        if (posY < -50) posY = header.offsetHeight + 50;
+
+                        iconEl.style.left = posX + "px";
+                        iconEl.style.top = posY + "px";
+                        iconEl.style.transform = `rotate(${rotationDeg}deg)`;
+
+                        requestAnimationFrame(animateIcon);
+                    }
+
+                    wrapper.appendChild(iconEl);
+                    animateIcon();
+                }
+            }
+
+            // starts the obecxts
+            window.addEventListener("load", function () {
+                initFloatingIcons();
+                init();
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,21 @@
+{
+	"name": "bigstone-api",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev --remote",
+		"start": "wrangler dev --remote",
+		"test": "vitest"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "^0.8.71",
+		"vitest": "~3.2.0",
+		"wrangler": "^4.35.0"
+	},
+	"dependencies": {
+		"bcrypt": "^6.0.0",
+		"bcryptjs": "^3.0.3",
+		"jsonwebtoken": "^9.0.3"
+	}
+}
