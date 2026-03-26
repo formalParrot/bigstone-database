@@ -20,7 +20,7 @@ async function init() {
   }
 }
 
-const fallbackGif = "img_fallback.gif";
+const fallbackGif = "../gifs/img_fallback.gif";
 
 function loadProjects() {
   const grid = document.querySelector("#grid");
