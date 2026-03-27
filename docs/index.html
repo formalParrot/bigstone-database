@@ -433,7 +433,7 @@
                     }
 
                     projectsData = await response.json();
-                    console.log(projectsData);
+                    // console.log(projectsData);
 
                     loadProjects();
 
@@ -505,7 +505,6 @@
                         if (ignore_focus) return;
                         const cards = document.querySelectorAll(".card");
                         const index = Array.from(cards).indexOf(e.target);
-                        console.log(index);
 
                         if (index !== -1) {
                             currentIndex = index + 1;
