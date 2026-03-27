@@ -1,4 +1,5 @@
 import { requireAuth } from '../utils/auth.js';
+import { uploadFile } from '../utils/cloudinary.js';
 
 export async function handleProjects(request, env, corsHeaders) {
 	const url = new URL(request.url);
@@ -17,6 +18,16 @@ export async function handleProjects(request, env, corsHeaders) {
 		return new Response(JSON.stringify({ id: result.meta.last_row_id }), {
 			headers: { 'Content-Type': 'application/json', ...corsHeaders },
 		});
+	}
+
+	if (request.method === 'POST' && path.startsWith('/projects/')) {
+		const parts = path.split('/').filter(Boolean);
+		const id = parts[1];
+
+		if (parts.length === 3 && parts[2] === 'upload') {
+			const formData = await request.formData();
+			const file = formData.get('file');
+		}
 	}
 
 	/* GET methods */

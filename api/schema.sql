@@ -42,14 +42,30 @@ CREATE TABLE components (
   FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- COMPONENT DOWNLOADS
-CREATE TABLE component_downloads (
+-- FILE DOWNLOADS
+CREATE TABLE files (
   id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
-  component_id TEXT NOT NULL,
-  link TEXT NOT NULL,
 
+  user_id TEXT NOT NULL,
+
+  -- linkage
+  project_id TEXT,
+  component_id TEXT,
+
+  -- Cloudinary info
+  public_id TEXT NOT NULL,        -- needed for deletion
+  url TEXT NOT NULL,              -- secure_url from Cloudinary
+  type TEXT NOT NULL, 			  -- 'image, schematic'
+  format TEXT,                    -- 'png', 'schematic', etc.
+  bytes INTEGER,                  -- file size
+
+
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
   FOREIGN KEY (component_id) REFERENCES components(id) ON DELETE CASCADE
-);
+)
 
 -- CONTRIBUTORS
 CREATE TABLE contributors (
