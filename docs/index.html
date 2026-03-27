@@ -419,6 +419,7 @@
 
         <script>
             let projectsData = [];
+            let currentIndex = 0;
 
             async function init() {
                 try {
@@ -432,9 +433,85 @@
                     }
 
                     projectsData = await response.json();
-                    console.log(projectsData);
+                    // console.log(projectsData);
 
                     loadProjects();
+
+                    const cards = document.querySelectorAll(".card");
+                    let ignore_focus = false;
+
+                    document.addEventListener("keydown", (e) => {
+                        if (!["ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown"].includes(e.key)) {
+                            return;
+                        }
+                        if (!cards.length) return;
+                        const len = cards.length + 1;
+
+                        // Detect number of columns dynamically
+                        const grid = document.querySelector("#grid");
+                        const gridStyle = window.getComputedStyle(grid);
+                        const columns = gridStyle.gridTemplateColumns.split(" ").length;
+
+                        if (e.key === "ArrowRight") {
+                            currentIndex = (currentIndex + 1) % len;
+                        }
+
+                        if (e.key === "ArrowLeft") {
+                            currentIndex = (currentIndex - 1 + len) % len;
+                        }
+
+                        if (e.key === "ArrowDown") {
+                            if (currentIndex == 0) {
+                                currentIndex = 1;
+                            } else if (currentIndex == len - 1) {
+                                currentIndex = 0;
+                            } else if (currentIndex + columns >= len) {
+                                currentIndex = len - 1;
+                            } else {
+                                currentIndex = (currentIndex + columns) % len;
+                            }
+                        }
+
+                        if (e.key === "ArrowUp") {
+                            if (currentIndex == 0) {
+                                currentIndex = len - 1;
+                            } else if (currentIndex - columns <= 0) {
+                                currentIndex = 0;
+                            } else {
+                                currentIndex = (currentIndex - columns + len) % len;
+                            }
+                        }
+
+                        let target;
+                        if (currentIndex == 0) {
+                            target = document.querySelector("#search");
+                        } else {
+                            target = cards[currentIndex - 1];
+                        }
+                        ignore_focus = true;
+                        target.focus();
+
+                        if (currentIndex != 0 && currentIndex < len - columns) {
+                            target.scrollIntoView({
+                                behavior: "smooth",
+                                block: "center",
+                                inline: "center"
+                            });
+                        }
+                        ignore_focus = false;
+                    });
+
+                    document.addEventListener("focusin", (e) => {
+                        if (ignore_focus) return;
+                        const cards = document.querySelectorAll(".card");
+                        const index = Array.from(cards).indexOf(e.target);
+
+                        if (index !== -1) {
+                            currentIndex = index + 1;
+                        } else {
+                            currentIndex = 0;
+                        }
+                    });
                 } catch (error) {
                     console.error("Fetch error:", error);
                 }
@@ -449,6 +526,8 @@
                 projectsData.forEach(function (project) {
                     const card = document.createElement("div");
                     card.className = "card uk-card uk-card-default";
+                    card.role = "button";
+                    card.tabIndex = 0;
                     card.dataset.name = project.name.toLowerCase();
 
                     const imgPath = project.banner_url || fallbackGif;
@@ -468,14 +547,23 @@
                     const snippet = words.slice(0, 5).join(" ") + "...";
 
                     card.innerHTML = `
-                <img src="${imgPath}" alt="${project.name}" onerror="this.onerror=null; this.src='${fallbackGif}';" />
-                <h3 class="uk-card-title">${project.name}</h3>
-                <p>${snippet}</p>
-            `;
+                        <img src="${imgPath}" alt="${project.name}" onerror="this.onerror=null; this.src='${fallbackGif}';" />
+                        <h3 class="uk-card-title">${project.name}</h3>
+                        <p>${snippet}</p>
+                    `;
+                    card.addEventListener("keydown", (e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            card.click();
+                        }
+                    });
+
 
                     grid.appendChild(card);
                 });
             }
+
+            let lastFocusedElement = null;
 
             async function openModal(
                 title,
@@ -484,6 +572,7 @@
                 imageUrl,
                 downloadLink,
             ) {
+                lastFocusedElement = document.activeElement;
                 document.querySelector("#m-title").textContent = title;
                 document.querySelector("#m-desc").textContent = description;
 
@@ -516,7 +605,13 @@
                     console.error(err);
                 }
 
-                UIkit.modal(document.querySelector("#compModal")).show();
+                const modal = UIkit.modal(document.querySelector("#compModal"))
+
+                modal.$el.addEventListener('hidden', () => {
+                    if (lastFocusedElement) lastFocusedElement.focus();
+                });
+                
+                modal.show();
             }
 
             // Search blocks
@@ -584,7 +679,7 @@
                     animateIcon();
                 }
             }
-
+            
             // starts the obecxts
             window.addEventListener("load", function () {
                 initFloatingIcons();
