@@ -535,6 +535,7 @@
 
                     card.addEventListener("click", function () {
                         openModal(
+                            project.id,
                             project.name,
                             project.desc,
                             project.owner_id,
@@ -566,6 +567,7 @@
             let lastFocusedElement = null;
 
             async function openModal(
+                projectId,
                 title,
                 description,
                 ownerId,
@@ -592,26 +594,42 @@
                 tagsContainer.innerHTML = `<span class="tag">Loading...</span>`;
 
                 try {
-                    const res = await fetch(
+                    let userRes = await fetch(
                         `https://bigstone-api.justparrot.workers.dev/users/${ownerId}`,
                     );
-                    const user = await res.json();
+                    let userData = await userRes.json();
 
-                    tagsContainer.innerHTML = `
-                        <span class="tag">${user.username}</span>
-                    `;
-                } catch (err) {
-                    tagsContainer.innerHTML = `<span class="tag">Unknown</span>`;
-                    console.error(err);
+                    let compRes = await fetch(
+                        `https://bigstone-api.justparrot.workers.dev/projects/${projectId}/components`,
+                    );
+                    let compData = await compRes.json();
+
+                    tagsContainer.innerHTML = `<span class="tag">${userData.username}</span>`;
+
+                    let listHtml = "";
+                    if (compData && compData.length > 0) {
+                        for (let i = 0; i < compData.length; i++) {
+                            let c = compData[i];
+                            listHtml += `
+                                        <div style="margin-top:5px; background:#2e2e32; padding:10px; border-radius:8px;">
+                                            <div style="font-size:13px; margin-bottom:3px;">${c.name}</div>
+                                            <button onclick="navigator.clipboard.writeText('${c.id}')" style="margin-right:8px;">Copy ID</button>
+                                            <a href="https://bigstone-api.justparrot.workers.dev/components/${c.id}" target="_blank">Download</a>
+                                        </div>`;
+                        }
+                    } else {
+                        listHtml = "<p style='bold:true; color:#AA4A44;'>Nothing to see here &#128064;</p>";
+                    }
+
+                    document.querySelector("#m-desc").innerHTML +=
+                        '<h4 style="margin-top:12px;">Components</h4>' +
+                        listHtml;
+                } catch (e) {
+                    tagsContainer.innerHTML =
+                        '<span class="tag">Unknown</span>';
+                    console.error(e);
                 }
-
-                const modal = UIkit.modal(document.querySelector("#compModal"))
-
-                modal.$el.addEventListener('hidden', () => {
-                    if (lastFocusedElement) lastFocusedElement.focus();
-                });
-                
-                modal.show();
+                UIkit.modal(document.querySelector("#compModal")).show();
             }
 
             // Search blocks
