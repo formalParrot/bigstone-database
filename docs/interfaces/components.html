@@ -23,7 +23,7 @@
             </label>
             <br />
             <label>
-                Ports (comma-separated):
+                Ports (comma seperated):
                 <input type="text" name="ports" />
             </label>
             <br />
@@ -43,10 +43,14 @@
                 const formData = new FormData(form);
                 const data = Object.fromEntries(formData.entries());
 
-                // clean ports
+                let portsArray = [];
                 if (data.ports) {
-                    data.ports = data.ports.split(",").map((p) => p.trim());
+                    portsArray = data.ports
+                        .split(",")
+                        .map((p) => p.trim())
+                        .filter(Boolean);
                 }
+                const payload = { ...data, ports: portsArray };
 
                 const token = localStorage.getItem("token");
 
@@ -59,7 +63,7 @@
                                 "Content-Type": "application/json",
                                 Authorization: `Bearer ${token}`,
                             },
-                            body: JSON.stringify(data),
+                            body: JSON.stringify(payload),
                         },
                     );
 
