@@ -605,39 +605,56 @@
                     let userRes = await fetch(
                         `https://bigstone-api.justparrot.workers.dev/users/${ownerId}`,
                     );
-                    let userData = await userRes.json();
+                    if (userRes.ok) {
+                        let userData = await userRes.json();
+                        tagsContainer.innerHTML = `<span class="tag">${userData.username || "Unknown"}</span>`;
+                    } else {
+                        tagsContainer.innerHTML = `<span class="tag">Unknown User</span>`;
+                    }
+                } catch (e) {
+                    console.error("User fetch error:", e);
+                    tagsContainer.innerHTML = `<span class="tag">Unknown User</span>`;
+                }
 
+                try {
                     let compRes = await fetch(
                         `https://bigstone-api.justparrot.workers.dev/projects/${projectId}/components`,
                     );
-                    let compData = await compRes.json();
 
-                    tagsContainer.innerHTML = `<span class="tag">${userData.username}</span>`;
+                    if (compRes.ok) {
+                        let compData = await compRes.json();
+                        let listHtml = "";
 
-                    let listHtml = "";
-                    if (compData && compData.length > 0) {
-                        for (let i = 0; i < compData.length; i++) {
-                            let c = compData[i];
-                            listHtml += `
-                                        <div style="margin-top:5px; background:#2e2e32; padding:10px; border-radius:8px;">
-                                            <div style="font-size:13px; margin-bottom:3px;">${c.name}</div>
-                                            <button onclick="popup();navigator.clipboard.writeText('${c.id}')" style="cursor: pointer;margin-right:8px;font-weight:bold;">Copy ID</button>
-                                            <a href="https://bigstone-api.justparrot.workers.dev/components/${c.id}" target="_blank" class="download-btn" id="m-download">Download</a>
-                                        </div>`;
+                        if (compData && compData.length > 0) {
+                            for (let i = 0; i < compData.length; i++) {
+                                let c = compData[i];
+                                listHtml += `
+                                    <div style="margin-top:5px; background:#2e2e32; padding:10px; border-radius:8px;">
+                                        <div style="font-size:13px; margin-bottom:3px;">${c.name}</div>
+                                        <button onclick="popup();navigator.clipboard.writeText('${c.id}')" style="cursor: pointer;margin-right:8px;font-weight:bold;">Copy ID</button>
+                                        <a href="https://bigstone-api.justparrot.workers.dev/components/${c.id}" target="_blank" class="download-btn" id="m-download">Download</a>
+                                    </div>`;
+                            }
+                        } else {
+                            listHtml =
+                                "<p style='font-weight:bold; color:#AA4A44;'>Nothing to see here &#128064;</p>";
                         }
-                    } else {
-                        listHtml =
-                            "<p style='font-weight:bold; color:#AA4A44;'>Nothing to see here &#128064;</p>";
-                    }
 
-                    document.querySelector("#m-desc").innerHTML +=
-                        '<h4 style="margin-top:12px;">Components</h4>' +
-                        listHtml;
+                        document.querySelector("#m-desc").innerHTML +=
+                            '<h4 style="margin-top:12px;">Components</h4>' +
+                            listHtml;
+                    } else {
+                        console.error(
+                            "Component fetch failed with status:",
+                            compRes.status,
+                        );
+                    }
                 } catch (e) {
-                    tagsContainer.innerHTML =
-                        '<span class="tag">Unknown</span>';
-                    console.error(e);
+                    console.error("Component fetch error:", e);
+                    document.querySelector("#m-desc").innerHTML +=
+                        '<p style="color:#AA4A44;">Failed to load components.</p>';
                 }
+
                 UIkit.modal(document.querySelector("#compModal")).show();
             }
 
