@@ -301,12 +301,12 @@
 
             .download-btn {
                 position: absolute;
-                right: 32px;
-                bottom: 35px;
+                margin-top:-20px;
+                margin-left: 240px;
                 background: #008694;
                 color: #fff;
                 text-decoration: none;
-                padding: 8px 18px;
+                padding: 8px 15px;
                 border-radius: 8px;
                 font-size: 14px;
                 font-weight: 700;
@@ -613,12 +613,13 @@
                             listHtml += `
                                         <div style="margin-top:5px; background:#2e2e32; padding:10px; border-radius:8px;">
                                             <div style="font-size:13px; margin-bottom:3px;">${c.name}</div>
-                                            <button onclick="navigator.clipboard.writeText('${c.id}')" style="margin-right:8px;">Copy ID</button>
-                                            <a href="https://bigstone-api.justparrot.workers.dev/components/${c.id}" target="_blank">Download</a>
+                                            <button onclick="popup();navigator.clipboard.writeText('${c.id}')" style="cursor: pointer;margin-right:8px;font-weight:bold;">Copy ID</button>
+                                            <a href="https://bigstone-api.justparrot.workers.dev/components/${c.id}" target="_blank" class="download-btn" id="m-download">Download</a>
                                         </div>`;
+                                        
                         }
                     } else {
-                        listHtml = "<p style='bold:true; color:#AA4A44;'>Nothing to see here &#128064;</p>";
+                        listHtml = "<p style='font-weight:bold; color:#AA4A44;'>Nothing to see here &#128064;</p>";
                     }
 
                     document.querySelector("#m-desc").innerHTML +=
