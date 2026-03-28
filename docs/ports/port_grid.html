@@ -3,6 +3,13 @@
     <head>
         <title>Port Grid</title>
         <style>
+            :root {
+                --base-size: 16px; /* main cell size */
+                --cell-gap: calc(var(--base-size) / 16);
+                --line-thick: calc(var(--base-size) / 16);
+                --small-border: calc(var(--base-size) / 32);
+            }
+
             body {
                 background: #000;
                 margin: 0;
@@ -11,24 +18,35 @@
                 align-items: center;
                 height: 100vh;
                 font-family: sans-serif;
+                flex-direction: column;
+                gap: 10px;
             }
 
             #grid {
                 display: grid;
-                grid-template-columns: repeat(16, 32px);
-                grid-template-rows: repeat(16, 32px);
-                gap: 2px;
+                grid-template-columns: repeat(16, var(--base-size));
+                grid-template-rows: repeat(16, var(--base-size));
+                gap: var(--cell-gap);
             }
 
             .cell {
-                width: 32px;
-                height: 32px;
+                width: var(--base-size);
+                height: var(--base-size);
                 background: #1a1a1a;
                 position: relative;
                 overflow: hidden;
+                border-right: var(--small-border) solid #333;
+                border-bottom: var(--small-border) solid #333;
             }
 
-            /* texture layer */
+            .cell.line-x {
+                border-right: var(--line-thick) solid #666;
+            }
+
+            .cell.line-y {
+                border-bottom: var(--line-thick) solid #666;
+            }
+
             .cell img {
                 width: 100%;
                 height: 100%;
@@ -45,144 +63,61 @@
         <button id="loadComponentBtn">Load</button>
 
         <div id="grid"></div>
+
         <script>
             const GRID_SIZE = 16;
+            const grid = document.getElementById("grid");
+            const cells = [];
 
-            // input
-            const input = document.getElementById("componentIdInput");
-            const btn = document.getElementById("loadComponentBtn");
-
-            btn.addEventListener("click", () => {
-                const id = input.value.trim();
-                if (id) loadComponent(id);
-            });
-
-            // port coordinates
+            // example port coordinates
             const PORT_COORDS = {
                 iBIN: { x: 7, y: 2 },
                 oBIN: { x: 10, y: 2 },
-
                 iHEX: { x: 5, y: 2 },
                 oHEX: { x: 12, y: 2 },
-
                 "iHEX-STATE": { x: 5, y: 4 },
                 "oHEX-STATE": { x: 12, y: 4 },
-
                 "iHEX-2/1": { x: 7, y: 6 },
                 "iHEX-2/2": { x: 9, y: 6 },
                 "oHEX-2/1": { x: 8, y: 6 },
                 "oHEX-2/2": { x: 10, y: 6 },
-
                 "iBIN-LR/1": { x: 3, y: 2 },
                 "iBIN-LR/2": { x: 3, y: 4 },
-                "iBIN-LR/3": { x: 3, y: 6 },
-                "iBIN-LR/4": { x: 3, y: 8 },
-                "iBIN-LR/5": { x: 3, y: 10 },
-                "iBIN-LR/6": { x: 3, y: 12 },
-                "iBIN-LR/7": { x: 3, y: 14 },
-                "iBIN-LR/8": { x: 3, y: 16 },
-
                 "oBIN-LR/1": { x: 14, y: 2 },
                 "oBIN-LR/2": { x: 14, y: 4 },
-                "oBIN-LR/3": { x: 14, y: 6 },
-                "oBIN-LR/4": { x: 14, y: 8 },
-                "oBIN-LR/5": { x: 14, y: 10 },
-                "oBIN-LR/6": { x: 14, y: 12 },
-                "oBIN-LR/7": { x: 14, y: 14 },
-                "oBIN-LR/8": { x: 14, y: 16 },
-
-                iSOUND: { x: 7, y: 4 },
-                oSOUND: { x: 10, y: 4 },
-
-                iRAIL: { x: 8, y: 2 },
-                oRAIL: { x: 9, y: 2 },
             };
 
-            // color ports
             const COLOR_MAP = {
                 ibin: "#8B0000",
                 obin: "#8B0000",
-
                 ihex: "#0000FF",
                 ohex: "#0000FF",
-
                 "ihex-state": "#0B6623",
                 "ohex-state": "#0B6623",
-
                 "ihex-2/1": "#e6CC00",
                 "ihex-2/2": "#e6CC00",
                 "ohex-2/1": "#e6CC00",
                 "ohex-2/2": "#e6CC00",
-
                 "ibin-lr/1": "#008b8b",
                 "ibin-lr/2": "#008b8b",
-                "ibin-lr/3": "#008b8b",
-                "ibin-lr/4": "#008b8b",
-                "ibin-lr/5": "#008b8b",
-                "ibin-lr/6": "#008b8b",
-                "ibin-lr/7": "#008b8b",
-                "ibin-lr/8": "#008b8b",
-
                 "obin-lr/1": "#008b8b",
                 "obin-lr/2": "#008b8b",
-                "obin-lr/3": "#008b8b",
-                "obin-lr/4": "#008b8b",
-                "obin-lr/5": "#008b8b",
-                "obin-lr/6": "#008b8b",
-                "obin-lr/7": "#008b8b",
-                "obin-lr/8": "#008b8b",
-
-                isound: "#8a00c2",
-                osound: "#8a00c2",
-
-                irail: "#654321",
-                orail: "#654321",
             };
 
-            // textures
             const TEXTURES = {
                 i: "textures/input.png",
                 o: "textures/output.png",
             };
 
-            const grid = document.getElementById("grid");
-            const cells = [];
-
-            async function loadComponent(id) {
-                const token = localStorage.getItem("token"); // if you need auth
-                try {
-                    const res = await fetch(
-                        `https://bigstone-api.justparrot.workers.dev/components/${id}`,
-                    );
-                    const data = await res.json();
-                    let portNames = Array.isArray(data.ports)
-                        ? data.ports
-                        : JSON.parse(data.ports || "[]");
-                    renderPorts(portNames); // your existing code that places them on the grid
-                } catch (err) {
-                    console.error("Failed to load component:", err);
-                }
-            }
-
-            // create grid cells
+            // create grid
             for (let y = 0; y < GRID_SIZE; y++) {
                 for (let x = 0; x < GRID_SIZE; x++) {
                     const cell = document.createElement("div");
                     cell.classList.add("cell");
 
-                    // lines every 2 blocks
-                    if ((x + 1) % 2 === 0)
-                        cell.style.borderRight = "2px solid #666";
-                    if ((y + 1) % 2 === 0)
-                        cell.style.borderBottom = "2px solid #666";
+                    if ((x + 1) % 2 === 0) cell.classList.add("line-x");
+                    if ((y + 1) % 2 === 0) cell.classList.add("line-y");
 
-                    // border
-                    if (!cell.style.borderRight)
-                        cell.style.borderRight = "1px solid #333";
-                    if (!cell.style.borderBottom)
-                        cell.style.borderBottom = "1px solid #333";
-
-                    // remove right/bottom border for last col/row
                     if (x === GRID_SIZE - 1) cell.style.borderRight = "none";
                     if (y === GRID_SIZE - 1) cell.style.borderBottom = "none";
 
@@ -191,16 +126,13 @@
                 }
             }
 
-            // flips things
             function getIndex(x, y) {
-                const displayY = GRID_SIZE - y; // flip Y axis
-                const displayX = x - 1; // 1-based → 0-based
+                const displayY = GRID_SIZE - y;
+                const displayX = x - 1;
                 return displayY * GRID_SIZE + displayX;
             }
 
-            // render ports
             function renderPorts(portNames) {
-                // clear previous colors/textures
                 cells.forEach((cell) => {
                     cell.style.background = "#1a1a1a";
                     cell.querySelector("img")?.remove();
@@ -208,7 +140,7 @@
 
                 portNames.forEach((name) => {
                     const coords = PORT_COORDS[name];
-                    if (!coords) return; // skip unknown ports
+                    if (!coords) return;
 
                     const x = coords.x;
                     const y = coords.y;
@@ -236,6 +168,17 @@
                     }
                 });
             }
+
+            document
+                .getElementById("loadComponentBtn")
+                .addEventListener("click", () => {
+                    const id = document
+                        .getElementById("componentIdInput")
+                        .value.trim();
+                    if (!id) return;
+                    // fake fetch for example, just render all ports
+                    renderPorts(Object.keys(PORT_COORDS));
+                });
         </script>
     </body>
 </html>
