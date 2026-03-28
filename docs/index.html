@@ -362,6 +362,7 @@
         </style>
     </head>
     <body class="uk-background-background uk-text-foreground">
+        <div id="header"></div>
         <header id="mainHeader">
             <div class="particle-container" id="particles"></div>
 
@@ -729,6 +730,14 @@
                 initFloatingIcons();
                 init();
             });
+        </script>
+
+        <script>
+            fetch("header.html")
+                .then((r) => r.text())
+                .then((html) => {
+                    document.getElementById("header").innerHTML = html;
+                });
         </script>
     </body>
 </html>

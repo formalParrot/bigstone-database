@@ -168,6 +168,7 @@
         </style>
     </head>
     <body>
+        <div id="header"></div>
         <div class="sidebar">
             <div class="sidebar-header">
                 <a href="/bigstone-database/" class="home-icon" title="Home">
@@ -291,6 +292,14 @@
             }
 
             loadEndpoints();
+        </script>
+
+        <script>
+            fetch("../header.html")
+                .then((r) => r.text())
+                .then((html) => {
+                    document.getElementById("header").innerHTML = html;
+                });
         </script>
     </body>
 </html>

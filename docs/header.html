@@ -1,0 +1,90 @@
+<style>
+    .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 999;
+
+        flex-direction: row;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 12px 24px;
+
+        background: #1f1f21;
+        border-bottom: 1px solid #2e2e32;
+
+        box-shadow: 0 6px 0 #121214;
+    }
+
+    /* left side */
+    .topbar .logo {
+        font-weight: 700;
+        font-size: 16px;
+        color: #008694;
+    }
+
+    /* middle nav */
+    .topbar .nav {
+        display: flex;
+        gap: 20px;
+    }
+
+    .topbar .nav a {
+        color: #ccc;
+        text-decoration: none;
+        font-size: 14px;
+        transition: 0.15s;
+    }
+
+    .topbar .nav a:hover {
+        color: #fff;
+    }
+
+    /* right side */
+    .topbar .account {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .topbar .account span {
+        font-size: 14px;
+        color: #aaa;
+    }
+
+    .topbar button {
+        background: #008694;
+        border: none;
+        color: white;
+        padding: 6px 10px;
+        border-radius: 6px;
+
+        cursor: pointer;
+
+        box-shadow: 0 3px 0 #005862;
+        transition: 0.1s;
+    }
+
+    .topbar button:active {
+        transform: translateY(2px);
+        box-shadow: 0 1px 0 #005862;
+    }
+</style>
+
+<header class="topbar">
+    <div class="logo">Bigstone DB</div>
+
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/docs">Docs</a>
+    </div>
+
+    <div class="account">
+        <span> Username </span>
+        <button>⚙</button>
+    </div>
+</header>
+
+<script></script>
