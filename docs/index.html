@@ -359,9 +359,63 @@
                 color: #008694;
                 box-shadow: 0 3px 0 #161618;
             }
+
+            .auth-btn {
+
+                top: 25px;
+                right: 25px;
+                width: 45px;
+                height: 45px;
+                cursor: pointer;
+                z-index: 100;
+                filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+                transition: transform 0.1s;
+                position: absolute;
+            }
+            .auth-btn:active {
+                transform: translateY(5px);
+            }
+            #authForm {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+                
+            #authForm button {
+                width: 64%;
+                padding: 16px 24px;
+                border-radius: 12px;
+                border: none;
+                outline: none;
+                background: #29292b;
+                color: white;
+                font-size: 15px;
+                box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.52), 0 5px 0 #111112, 0 10px 22px rgba(0, 0, 0, 0.45);
+                margin-top: 15px;
+                cursor: pointer;
+            }
+            #authForm label {
+                display: block;
+                margin-top: 10px;
+                color: dimgray;
+                font-size: 17px;
+            }
+
+            #authForm input[type="checkbox"] {
+                accent-color: green;
+            margin-right: 8px;
+            box-shadow: 3;
+            padding: 0;
+            transform: none;
+                  width: auto;
+
+            }
         </style>
     </head>
     <body class="uk-background-background uk-text-foreground">
+        
+        <img uk-toggle="target: #authModal"            class="auth-btn" src="auth.png" alt="auth"   />
+
         <header id="mainHeader">
             <div class="particle-container" id="particles"></div>
 
@@ -414,6 +468,42 @@
                     <div id="p-tags" class="tag-container"></div>
                 </div>
                 <!--Download Button Removed for now-->
+                </div>
+        </div>
+
+        <div id="authModal" uk-modal>
+            <div class="uk-modal-dialog custom-modal-dialog">
+                <button
+                    class="uk-modal-close-default custom-close-btn"
+                    type="button"
+                    uk-close></button>
+                <div class="modal-body-content">
+                    <h2>Auth</h2>
+                    <form id="authForm">
+                    <input
+                    type="text"
+                        id="username"
+                        placeholder="Username"
+                        required/><br />
+                        <input
+                    type="password"
+                    id="password"
+                        placeholder="Password"
+                        required/><br />
+                        <label id="hide-when-log-in">
+                        <input type="checkbox" name="consent" required />
+                        I agree to the
+                    <a href="privacy.html" target="_blank" style="color:#008694;">Privacy Policy</a>.
+                        </label>
+                        <br/>
+                        <select id="action">
+                    <option value="register">Register</option>
+                        <option value="login">Login</option>
+                        </select><br/>
+                        <button type="submit">Submit</button>
+                    </form>
+                    <p id="message" style="margin-top: 20px; color: #008694; font-weight: bold;"></p>
+                </div>
             </div>
         </div>
 
@@ -729,6 +819,62 @@
                 initFloatingIcons();
                 init();
             });
+            const form = document.getElementById("authForm");
+                        const message = document.getElementById("message");
+            
+                        const API_URL = "https://bigstone-api.justparrot.workers.dev";
+            
+                        form.addEventListener("submit", async (e) => {
+                            e.preventDefault();
+            
+                            const username = document.getElementById("username").value;
+                            const password = document.getElementById("password").value;
+                            const action = document.getElementById("action").value;
+            
+                            try {
+                                const endpoint =
+                                    action === "register"
+                                        ? "/auth/register"
+                                        : "/auth/login";
+            
+                                const res = await fetch(API_URL + endpoint, {
+                                    method: "POST",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({ username, password }),
+                                });
+            
+                                if (!res.ok) {
+                                    const text = await res.text();
+                                    message.textContent = `Error: ${text}`;
+                                    return;
+                                }
+            
+                                if (action === "login") {
+                                    const data = await res.json();
+                                    localStorage.setItem("token", data.token);
+                                    message.textContent = "Logged in successfully!";
+                                } else {
+                                    // auto-login after register
+                                    const loginRes = await fetch(API_URL + "/auth/login", {
+                                        method: "POST",
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify({ username, password }),
+                                    });
+            
+                                    if (loginRes.ok) {
+                                        const data = await loginRes.json();
+                                        localStorage.setItem("token", data.token);
+                                        message.textContent = "Registered and logged in!";
+                                    } else {
+                                        const text = await loginRes.text();
+                                        message.textContent =
+                                            "Registered, but login failed: " + text;
+                                    }
+                                }
+                            } catch (err) {
+                                message.textContent = "Error";
+                            }
+                        });
         </script>
     </body>
 </html>
