@@ -35,22 +35,37 @@
             htmlElement.classList.add(__FRANKEN__.layout || "uk-layout-small");
             htmlElement.classList.add(__FRANKEN__.ff || "uk-ff-a");
         </script> -->
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     </head>
     <body class="bg color" style="--bg: var(--uk-bg); --color: var(--uk-bg-f)">
-        <div class="uk-flex uk-flex-center">
+        <div class="flex justify-center p-2 items-center">
             <button
-                class="uk-button uk-button-default p-5"
+                id="themeBtn"
+                class="uk-button uk-button-default"
                 style="
-                    --bg: var(--uk-primary);
-                    --color: var(--uk-primary-f) border: 3px solid
-                        var(--uk-border);
+                    --bg: var(--uk-secondary);
+                    --color: var(--uk-secondary-f);
+                    border: 1px solid var(--uk-border);
                 "
             >
-                Hi
+                <uk-icon
+                    id="themeIcn"
+                    class="size"
+                    style="
+                        --size: 4;
+                        --bg: var(--uk-secondary);
+                        --color: var(--uk-secondary-f);
+                    "
+                    icon="sun"
+                ></uk-icon>
             </button>
         </div>
 
         <!-- franken JS -->
+        <script>
+            window.Lucide = {};
+            window.ApexCharts = {};
+        </script>
         <script
             src="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/js/hwc-icon.iife.js"
             type="module"
@@ -59,5 +74,23 @@
             src="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/js/hwc-components.iife.js"
             type="module"
         ></script>
+
+        <!-- scripts -->
+
+        <!-- Theme Toggle -->
+        <script>
+            const btn = document.getElementById("themeBtn");
+            const icon = document.getElementById("themeIcn");
+
+            let isLight = true;
+
+            btn.addEventListener("click", () => {
+                isLight = !isLight;
+
+                icon.setAttribute("icon", isLight ? "sun" : "moon");
+
+                document.documentElement.classList.toggle("dark", !isLight);
+            });
+        </script>
     </body>
 </html>
