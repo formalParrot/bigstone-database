@@ -38,51 +38,72 @@
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     </head>
     <body class="bg color" style="--bg: var(--uk-bg); --color: var(--uk-bg-f)">
-        <div class="flex justify-center p-2 items-center">
-            <button
-                id="themeBtn"
-                class="uk-button uk-button-default"
-                style="
-                    --bg: var(--uk-secondary);
-                    --color: var(--uk-secondary-f);
-                    border: 1px solid var(--uk-border);
-                "
+        <div class="p-5">
+            <div
+                class="uk-card uk-card-body flex flex-col items-center justify-center text-center"
+                style="border: 0.5px solid var(--uk-border); position: relative"
             >
-                <uk-icon
-                    id="themeIcn"
-                    class="size"
+                <h1 class="uk-h1">Bigstone Database</h1>
+                <p class="uk-p">
+                    A collection of Bigstone components in one place.
+                </p>
+                <button
+                    id="themeBtn"
+                    class="uk-button uk-button-default uk-button-xsmall"
                     style="
-                        --size: 4;
                         --bg: var(--uk-secondary);
                         --color: var(--uk-secondary-f);
+                        position: absolute;
+                        top: 10px;
+                        right: 10px;
+                        border: 1px solid var(--uk-border);
                     "
-                    icon="sun"
-                ></uk-icon>
-            </button>
+                >
+                    <uk-icon
+                        id="themeIcn"
+                        class="size"
+                        style="
+                            --size: 4;
+                            --bg: var(--uk-secondary);
+                            --color: var(--uk-secondary-f);
+                        "
+                        icon="sun"
+                    ></uk-icon>
+                </button>
+            </div>
+
+            <div
+                id="projGrid"
+                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 pt-5"
+            >
+                <div class="uk-card uk-card-body">
+                    <h1 class="uk-h1">Okak</h1>
+                </div>
+            </div>
         </div>
 
-        <!-- franken JS -->
-        <script>
-            window.Lucide = {};
-            window.ApexCharts = {};
-        </script>
-        <script
-            src="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/js/hwc-icon.iife.js"
-            type="module"
-        ></script>
-        <script
-            src="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/js/hwc-components.iife.js"
-            type="module"
-        ></script>
-
         <!-- scripts -->
+        <div>
+            <script>
+                window.Lucide = {};
+                window.ApexCharts = {};
+            </script>
+            <script
+                src="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/js/hwc-icon.iife.js"
+                type="module"
+            ></script>
+            <script
+                src="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/js/hwc-components.iife.js"
+                type="module"
+            ></script>
+        </div>
 
         <!-- Theme Toggle -->
         <script>
             const btn = document.getElementById("themeBtn");
             const icon = document.getElementById("themeIcn");
 
-            let isLight = true;
+            let isLight = false;
 
             btn.addEventListener("click", () => {
                 isLight = !isLight;
@@ -90,7 +111,54 @@
                 icon.setAttribute("icon", isLight ? "sun" : "moon");
 
                 document.documentElement.classList.toggle("dark", !isLight);
+
+                /* theme <button
+                    id="themeBtn"
+                    class="uk-button uk-button-default uk-button-xsmall"
+                    style="
+                        --bg: var(--uk-secondary);
+                        --color: var(--uk-secondary-f);
+                        border: 1px solid var(--uk-border);
+                    "
+                >
+                    <uk-icon
+                        id="themeIcn"
+                        class="size"
+                        style="
+                            --size: 4;
+                            --bg: var(--uk-secondary);
+                            --color: var(--uk-secondary-f);
+                        "
+                        icon="sun"
+                    ></uk-icon>
+                </button>
+                */
             });
+        </script>
+
+        <!-- Project Grid -->
+        <script>
+            const grid = document.getElementById("projGrid");
+
+            async function loadCards() {
+                const res = await fetch(
+                    "https://bigstone-api.justparrot.workers.dev/projects",
+                );
+                const data = await res.json();
+
+                grid.innerHTML = data
+                    .map(
+                        (item) => `
+                <div class="uk-card uk-card-body hover:shadow-lg">
+                    <img src="${item.banner_url}" alt="${item.name}" />
+                    <h3 class="uk-h3">${item.name}</h3>
+                </div>
+            `,
+                    )
+                    .join("");
+            }
+
+            loadCards();
         </script>
     </body>
 </html>
