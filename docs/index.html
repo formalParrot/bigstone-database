@@ -39,6 +39,7 @@
     </head>
     <body class="bg color" style="--bg: var(--uk-bg); --color: var(--uk-bg-f)">
         <div class="p-5">
+            <!-- soon to be navbar -->
             <div
                 class="uk-card uk-card-body flex flex-col items-center justify-center text-center"
                 style="border: 0.5px solid var(--uk-border); position: relative"
@@ -47,6 +48,8 @@
                 <p class="uk-p">
                     A collection of Bigstone components in one place.
                 </p>
+
+                <!-- Theme Btn -->
                 <button
                     id="themeBtn"
                     class="uk-button uk-button-default uk-button-xsmall"
@@ -70,16 +73,107 @@
                         icon="sun"
                     ></uk-icon>
                 </button>
+                <!-- Auth Btn -->
+                <button
+                    id="userBtn"
+                    class="uk-button uk-button-default uk-button-xsmall"
+                    style="
+                        --bg: var(--uk-secondary);
+                        --color: var(--uk-secondary-f);
+                        position: absolute;
+                        top: 10px;
+                        right: 65px;
+                        border: 1px solid var(--uk-border);
+                    "
+                >
+                    <uk-icon
+                        class="size"
+                        style="
+                            --size: 4;
+                            --bg: var(--uk-secondary);
+                            --color: var(--uk-secondary-f);
+                        "
+                        icon="user"
+                        onclick="authModal()"
+                    ></uk-icon>
+                </button>
+
+                <!-- Github Btn -->
+                <button
+                    onclick="
+                        window.open(
+                            'https://github.com/formalparrot/bigstone-database',
+                        )
+                    "
+                    target="_blank"
+                    id="gitBtn"
+                    class="uk-button uk-button-default uk-button-xsmall"
+                    style="
+                        --bg: var(--uk-secondary);
+                        --color: var(--uk-secondary-f);
+                        position: absolute;
+                        top: 10px;
+                        left: 10px;
+                        border: 1px solid var(--uk-border);
+                    "
+                >
+                    <uk-icon
+                        class="size"
+                        style="
+                            --size: 4;
+                            --bg: var(--uk-secondary);
+                            --color: var(--uk-secondary-f);
+                        "
+                        icon="git-branch"
+                    ></uk-icon>
+                </button>
             </div>
 
+            <!-- search bar -->
+            <div
+                class="mt-5 uk-card uk-card-body flex flex-col items-center justify-center text-center"
+                style="border: 0.5px solid var(--uk-border); position: relative"
+            >
+                <form class="w-full max-w-xl">
+                    <input
+                        id="searchInput"
+                        class="uk-input w-full"
+                        type="text"
+                        placeholder="Search Database"
+                        aria-label="Search Database"
+                        style="border: 0.5px solid var(--uk-border)"
+                        autocomplete="off"
+                    />
+                </form>
+            </div>
+
+            <!-- project grid -->
             <div
                 id="projGrid"
                 class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 pt-5"
-            >
-                <div class="uk-card uk-card-body">
-                    <h1 class="uk-h1">Okak</h1>
+            ></div>
+            <template id="cardTemplate">
+                <div
+                    class="uk-card uk-card-body hover:shadow-lg cursor-pointer flex flex-col"
+                    style="border: 0.8px solid var(--uk-border)"
+                >
+                    <div
+                        class="w-full aspect-square overflow-hidden rounded-lg"
+                    >
+                        <img class="w-full h-full object-cover" />
+                    </div>
+
+                    <h3 class="uk-h3 mt-3"></h3>
+
+                    <!-- spacer for footer -->
+                    <div class="flex-grow"></div>
+
+                    <div class="flex justify-between text-sm opacity-70 mt-2">
+                        <span class="proj-user"></span>
+                        <span class="proj-date"></span>
+                    </div>
                 </div>
-            </div>
+            </template>
         </div>
 
         <!-- scripts -->
@@ -103,62 +197,119 @@
             const btn = document.getElementById("themeBtn");
             const icon = document.getElementById("themeIcn");
 
-            let isLight = false;
+            // load saved theme
+            let isLight = localStorage.getItem("theme") === "light";
+
+            applyTheme();
+
+            function applyTheme() {
+                document.documentElement.classList.toggle("dark", !isLight);
+                icon.setAttribute("icon", isLight ? "sun" : "moon");
+                localStorage.setItem("theme", isLight ? "light" : "dark");
+            }
 
             btn.addEventListener("click", () => {
                 isLight = !isLight;
-
-                icon.setAttribute("icon", isLight ? "sun" : "moon");
-
-                document.documentElement.classList.toggle("dark", !isLight);
-
-                /* theme <button
-                    id="themeBtn"
-                    class="uk-button uk-button-default uk-button-xsmall"
-                    style="
-                        --bg: var(--uk-secondary);
-                        --color: var(--uk-secondary-f);
-                        border: 1px solid var(--uk-border);
-                    "
-                >
-                    <uk-icon
-                        id="themeIcn"
-                        class="size"
-                        style="
-                            --size: 4;
-                            --bg: var(--uk-secondary);
-                            --color: var(--uk-secondary-f);
-                        "
-                        icon="sun"
-                    ></uk-icon>
-                </button>
-                */
+                applyTheme();
             });
         </script>
 
-        <!-- Project Grid -->
+        <!-- Project Grid + Search -->
         <script>
             const grid = document.getElementById("projGrid");
+            const template = document.getElementById("cardTemplate");
+            const input = document.getElementById("searchInput");
+
+            let allData = [];
 
             async function loadCards() {
                 const res = await fetch(
                     "https://bigstone-api.justparrot.workers.dev/projects",
                 );
-                const data = await res.json();
+                allData = await res.json();
 
-                grid.innerHTML = data
-                    .map(
-                        (item) => `
-                <div class="uk-card uk-card-body hover:shadow-lg">
-                    <img src="${item.banner_url}" alt="${item.name}" />
-                    <h3 class="uk-h3">${item.name}</h3>
-                </div>
-            `,
-                    )
-                    .join("");
+                render(allData);
             }
 
+            async function render(data) {
+                grid.innerHTML = "";
+
+                for (const [index, item] of data.entries()) {
+                    const clone = template.content.cloneNode(true);
+
+                    const card = clone.querySelector(".uk-card");
+                    const img = clone.querySelector("img");
+                    const title = clone.querySelector("h3");
+                    const user = clone.querySelector(".proj-user");
+                    const date = clone.querySelector(".proj-date");
+
+                    card.dataset.index = index;
+
+                    const fallback = "assets/img_fallback.gif";
+
+                    img.onerror = () => {
+                        img.onerror = null;
+                        img.src = fallback;
+                    };
+
+                    img.src = item.banner_url || fallback;
+                    img.alt = item.name;
+
+                    title.textContent = item.name;
+
+                    try {
+                        const res = await fetch(
+                            `https://bigstone-api.justparrot.workers.dev/users/${item.owner_id}`,
+                        );
+                        const owner = await res.json();
+                        user.textContent = owner.username || "Unknown";
+                    } catch {
+                        user.textContent = "Unknown";
+                    }
+
+                    date.textContent = item.created_at || "—";
+
+                    grid.appendChild(clone);
+                }
+            }
+
+            let timeout;
+
+            input.addEventListener("input", () => {
+                clearTimeout(timeout);
+
+                timeout = setTimeout(() => {
+                    const value = input.value.toLowerCase().trim();
+
+                    if (!value) {
+                        render(allData);
+                        return;
+                    }
+
+                    const query = input.value.toLowerCase().trim();
+
+                    const excludedFields = ["id", "owner_id", "banner_url"];
+
+                    const filtered = allData.filter((item) =>
+                        Object.entries(item)
+                            .filter(([key]) => !excludedFields.includes(key))
+                            .some(([, val]) =>
+                                String(val ?? "")
+                                    .toLowerCase()
+                                    .includes(query),
+                            ),
+                    );
+
+                    render(filtered);
+                }, 300);
+            });
+
             loadCards();
+        </script>
+
+        <!-- login modal -->
+        <script>
+            function authModal() {}
         </script>
     </body>
 </html>

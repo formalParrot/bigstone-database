@@ -89,3 +89,12 @@ html.dark {
 
     --uk-focus: oklch(60% 0.14 242.749 / 0.4);
 }
+
+.proj-user {
+    color: var(--uk-card-f);
+    opacity: 0.8;
+}
+
+.proj-date {
+    color: var(--uk-muted-f);
+}
