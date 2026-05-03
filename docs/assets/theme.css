@@ -1,0 +1,100 @@
+:root {
+    --uk-bg: oklch(95% 0.01 90);
+    --uk-bg-f: oklch(10% 0.01 90);
+
+    --uk-card: oklch(92% 0.01 90);
+    --uk-card-f: oklch(10% 0.01 90);
+
+    --uk-drop: oklch(93% 0.01 90);
+    --uk-drop-f: oklch(10% 0.01 90);
+
+    --uk-primary: oklch(50% 0.134 242.749);
+    --uk-primary-f: oklch(98% 0.005 285);
+
+    --uk-secondary: oklch(70% 0.01 90);
+    --uk-secondary-o: 10%;
+    --uk-secondary-f: oklch(25% 0.01 90);
+
+    --uk-muted: oklch(75% 0.01 90);
+    --uk-muted-o: 6%;
+    --uk-muted-f: oklch(45% 0.01 90);
+
+    --uk-accent: oklch(75% 0.01 90);
+    --uk-accent-o: 6%;
+    --uk-accent-f: oklch(20% 0.01 90);
+
+    --uk-danger: oklch(63% 0.22 25);
+    --uk-danger-f: oklch(50% 0.2 27);
+
+    --uk-success: oklch(70% 0.15 160);
+    --uk-success-f: oklch(50% 0.12 165);
+
+    --uk-warning: oklch(78% 0.18 70);
+    --uk-warning-f: oklch(55% 0.16 50);
+
+    --uk-info: oklch(62% 0.2 260);
+    --uk-info-f: oklch(49% 0.24 265);
+
+    --uk-border: oklch(85% 0.01 90);
+    --uk-border-o: 60%;
+
+    --uk-input: oklch(85% 0.01 90);
+    --uk-input-o: 60%;
+
+    --uk-focus: oklch(50% 0.134 242.749 / 0.35);
+}
+
+html.dark {
+    --uk-bg: oklch(14% 0.005 90);
+    --uk-bg-f: oklch(95% 0.005 90);
+
+    --uk-card: oklch(16% 0.005 90);
+    --uk-card-f: oklch(95% 0.005 90);
+
+    --uk-drop: oklch(16% 0.005 90);
+    --uk-drop-f: oklch(95% 0.005 90);
+
+    --uk-primary: oklch(60% 0.14 242.749);
+    --uk-primary-f: oklch(12% 0.01 285);
+
+    --uk-secondary: oklch(70% 0.01 90);
+    --uk-secondary-o: 10%;
+    --uk-secondary-f: oklch(90% 0.01 90);
+
+    --uk-muted: oklch(70% 0.01 90);
+    --uk-muted-o: 6%;
+    --uk-muted-f: oklch(75% 0.01 90);
+
+    --uk-accent: oklch(70% 0.01 90);
+    --uk-accent-o: 6%;
+    --uk-accent-f: oklch(95% 0.01 90);
+
+    --uk-danger: oklch(65% 0.22 25);
+    --uk-danger-f: oklch(18% 0.01 90);
+
+    --uk-success: oklch(72% 0.15 160);
+    --uk-success-f: oklch(18% 0.01 90);
+
+    --uk-warning: oklch(80% 0.18 70);
+    --uk-warning-f: oklch(18% 0.01 90);
+
+    --uk-info: oklch(65% 0.2 260);
+    --uk-info-f: oklch(18% 0.01 90);
+
+    --uk-border: oklch(30% 0.01 90);
+    --uk-border-o: 60%;
+
+    --uk-input: oklch(30% 0.01 90);
+    --uk-input-o: 60%;
+
+    --uk-focus: oklch(60% 0.14 242.749 / 0.4);
+}
+
+.proj-user {
+    color: var(--uk-card-f);
+    opacity: 0.8;
+}
+
+.proj-date {
+    color: var(--uk-muted-f);
+}
