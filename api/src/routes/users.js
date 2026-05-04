@@ -16,9 +16,7 @@ export async function handleUsers(request, env, corsHeaders) {
 			});
 		}
 
-		const userData = await env.DB.prepare('SELECT username, password_hash, cmpnt_creations, created_at FROM users WHERE id = ?')
-			.bind(id)
-			.first();
+		const userData = await env.DB.prepare('SELECT username, cmpnt_creations, created_at FROM users WHERE id = ?').bind(id).first();
 
 		const projects = await env.DB.prepare('SELECT * FROM projects WHERE owner_id = ?').bind(id).all();
 
