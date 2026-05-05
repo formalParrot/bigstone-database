@@ -10,7 +10,7 @@
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/css/frankenstyle-kit.min.css"
         />
-        <link rel="stylesheet" href="theme.css" />
+        <link rel="stylesheet" href="assets/theme.css" />
         <script
             src="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/js/hwc-core.iife.js"
             type="module"
@@ -75,9 +75,9 @@
                 </button>
                 <!-- Auth Btn -->
                 <button
-                    id="userBtn"
                     class="uk-button uk-button-default uk-button-xsmall"
                     style="
+                        border-radius: 8px;
                         --bg: var(--uk-secondary);
                         --color: var(--uk-secondary-f);
                         position: absolute;
@@ -85,6 +85,7 @@
                         right: 65px;
                         border: 1px solid var(--uk-border);
                     "
+                    onclick="window.open('auth/')"
                 >
                     <uk-icon
                         class="size"
@@ -94,10 +95,8 @@
                             --color: var(--uk-secondary-f);
                         "
                         icon="user"
-                        onclick="authModal()"
                     ></uk-icon>
                 </button>
-
                 <!-- Github Btn -->
                 <button
                     onclick="
@@ -112,8 +111,8 @@
                         --bg: var(--uk-secondary);
                         --color: var(--uk-secondary-f);
                         position: absolute;
-                        top: 10px;
-                        left: 10px;
+                        bottom: 10px;
+                        right: 10px;
                         border: 1px solid var(--uk-border);
                     "
                 >
@@ -150,7 +149,7 @@
             <!-- project grid -->
             <div
                 id="projGrid"
-                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 pt-5"
+                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-3 gap-4 pt-5"
             ></div>
             <template id="cardTemplate">
                 <div
@@ -190,29 +189,28 @@
                 src="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/js/hwc-components.iife.js"
                 type="module"
             ></script>
-        </div>
+            <!-- Theme Toggle -->
+            <script>
+                const btn = document.getElementById("themeBtn");
+                const icon = document.getElementById("themeIcn");
 
-        <!-- Theme Toggle -->
-        <script>
-            const btn = document.getElementById("themeBtn");
-            const icon = document.getElementById("themeIcn");
+                // load saved theme
+                let isLight = localStorage.getItem("theme") === "light";
 
-            // load saved theme
-            let isLight = localStorage.getItem("theme") === "light";
-
-            applyTheme();
-
-            function applyTheme() {
-                document.documentElement.classList.toggle("dark", !isLight);
-                icon.setAttribute("icon", isLight ? "sun" : "moon");
-                localStorage.setItem("theme", isLight ? "light" : "dark");
-            }
-
-            btn.addEventListener("click", () => {
-                isLight = !isLight;
                 applyTheme();
-            });
-        </script>
+
+                function applyTheme() {
+                    document.documentElement.classList.toggle("dark", !isLight);
+                    icon.setAttribute("icon", isLight ? "sun" : "moon");
+                    localStorage.setItem("theme", isLight ? "light" : "dark");
+                }
+
+                btn.addEventListener("click", () => {
+                    isLight = !isLight;
+                    applyTheme();
+                });
+            </script>
+        </div>
 
         <!-- Project Grid + Search -->
         <script>
@@ -307,9 +305,7 @@
             loadCards();
         </script>
 
-        <!-- login modal -->
-        <script>
-            function authModal() {}
-        </script>
+        <!-- login  -->
+        <script></script>
     </body>
 </html>

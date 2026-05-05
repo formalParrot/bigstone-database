@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bigstone DB</title>
+
+        <!-- styles -->
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/css/frankenstyle-kit.min.css"
+        />
+        <link rel="stylesheet" href="../assets/theme.css" />
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+        <!-- frankenstyle scripts -->
+        <script
+            src="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/js/hwc-core.iife.js"
+            type="module"
+        ></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/js/hwc-icon.iife.js"
+            type="module"
+        ></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/js/hwc-components.iife.js"
+            type="module"
+        ></script>
+
+        <style>
+            body {
+                --bg: var(--uk-bg);
+                --color: var(--uk-bg-f);
+            }
+
+            .tab {
+                display: none;
+            }
+
+            .tab.active {
+                display: block;
+            }
+
+            .card {
+                border: 0.5px solid var(--uk-border);
+                width: 100%;
+            }
+
+            .theme-btn {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                border: 1px solid var(--uk-border);
+                --bg: var(--uk-secondary);
+                --color: var(--uk-secondary-f);
+            }
+
+            .btn-success {
+                background-color: var(--uk-success);
+                color: var(--uk-success-f);
+            }
+        </style>
+
+        <!-- stars -->
+        <style>
+            #bg-stars {
+                position: fixed;
+                inset: 0;
+                z-index: -1;
+                overflow: hidden;
+            }
+
+            /* DARK = stars visible */
+            html.dark #bg-stars {
+                display: block;
+                background: black;
+            }
+
+            /* LIGHT = no stars, use your theme bg */
+            html:not(.dark) #bg-stars {
+                display: none;
+            }
+
+            .star {
+                position: absolute;
+                width: 2px;
+                height: 2px;
+                background: white;
+                border-radius: 50%;
+                animation: starFall linear infinite;
+            }
+
+            @keyframes starFall {
+                from {
+                    transform: translateY(-100vh);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(100vh);
+                    opacity: 1;
+                }
+            }
+        </style>
+    </head>
+
+    <body class="bg color">
+        <div id="bg-stars"></div>
+
+        <div class="p-5 flex flex-col items-center gap-5">
+            <!-- header card -->
+            <div
+                class="uk-card uk-card-body text-center flex flex-col items-center relative card"
+            >
+                <h1 class="uk-h1">Authorization</h1>
+                <p class="uk-paragraph">
+                    We look forward to having you on our platform!
+                </p>
+
+                <button
+                    id="themeBtn"
+                    class="uk-button uk-button-default uk-button-xsmall theme-btn"
+                >
+                    <uk-icon
+                        id="themeIcn"
+                        class="size"
+                        style="--size: 4"
+                        icon="sun"
+                    ></uk-icon>
+                </button>
+            </div>
+
+            <!-- tabs -->
+            <div
+                class="text-center uk-card uk-card-body"
+                style="border: 0.5px solid var(--uk-border)"
+            >
+                <div class="uk-button-group">
+                    <button
+                        class="uk-button uk-button-destructive"
+                        style="border: 0.5px solid var(--uk-border)"
+                        onclick="showTab('login')"
+                    >
+                        Login
+                    </button>
+                    <button
+                        class="uk-button uk-button-destructive"
+                        style="border: 0.5px solid var(--uk-border)"
+                        onclick="showTab('register')"
+                    >
+                        Register
+                    </button>
+                </div>
+            </div>
+
+            <!-- login card -->
+            <div
+                id="login"
+                class="tab active uk-card uk-card-body uk-width-medium uk-margin-auto"
+                style="border: 0.5px solid var(--uk-border)"
+            >
+                <h3 class="uk-h3 flex justify-center">Login</h3>
+                <form
+                    id="loginForm"
+                    class="uk-form-stacked uk-grid-small"
+                    uk-grid
+                >
+                    <div class="uk-width-1-1 mt-5">
+                        <input
+                            type="text"
+                            class="uk-input"
+                            style="border: 0.5px solid var(--uk-border)"
+                            id="loginUsr"
+                            placeholder="Username"
+                            required
+                        />
+                    </div>
+
+                    <div class="uk-width-1-1 mt-2">
+                        <input
+                            type="password"
+                            class="uk-input"
+                            id="loginPswd"
+                            placeholder="Password"
+                            style="border: 0.5px solid var(--uk-border)"
+                            required
+                        />
+                    </div>
+
+                    <div class="uk-width-1-1 mt-2 flex justify-center mt-3">
+                        <button
+                            class="uk-button uk-width-1-1 btn-success"
+                            type="submit"
+                            style=""
+                        >
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- register card -->
+            <div
+                id="register"
+                class="tab uk-card uk-card-body uk-width-medium uk-margin-auto"
+                style="border: 0.5px solid var(--uk-border)"
+            >
+                <h3 class="uk-h3 flex justify-center">Register</h3>
+                <form
+                    id="regForm"
+                    class="uk-form-stacked uk-grid-small"
+                    uk-grid
+                >
+                    <div class="uk-width-1-1 mt-5">
+                        <input
+                            type="text"
+                            class="uk-input"
+                            style="border: 0.5px solid var(--uk-border)"
+                            id="regUsr"
+                            placeholder="Username"
+                            required
+                        />
+                    </div>
+
+                    <div class="uk-width-1-1 mt-2">
+                        <input
+                            type="password"
+                            class="uk-input"
+                            id="regPswd"
+                            placeholder="Password"
+                            style="border: 0.5px solid var(--uk-border)"
+                            required
+                        />
+                    </div>
+
+                    <div class="uk-width-1-1 mt-2">
+                        <label>
+                            <input
+                                id="registerConsent"
+                                class="uk-checkbox mr-2"
+                                type="checkbox"
+                                name="consent"
+                                style="border: 0.5px solid var(--uk-muted)"
+                                required
+                            />
+                            I agree to the
+                            <a
+                                href="../privacy/"
+                                target="_blank"
+                                class="uk-link-muted"
+                                >Privacy Policy</a
+                            >
+                        </label>
+                    </div>
+
+                    <div class="uk-width-1-1 mt-2 flex justify-center mt-2">
+                        <button
+                            class="uk-button uk-width-1-1 btn-success"
+                            type="submit"
+                            style=""
+                        >
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div>
+            <script>
+                window.Lucide = {};
+                window.ApexCharts = {};
+            </script>
+            <script
+                src="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/js/hwc-icon.iife.js"
+                type="module"
+            ></script>
+            <script
+                src="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/js/hwc-components.iife.js"
+                type="module"
+            ></script>
+            <script>
+                const btn = document.getElementById("themeBtn");
+                const icon = document.getElementById("themeIcn");
+
+                let isLight = localStorage.getItem("theme") === "light";
+
+                function applyTheme() {
+                    document.documentElement.classList.toggle("dark", !isLight);
+                    icon.setAttribute("icon", isLight ? "sun" : "moon");
+                    localStorage.setItem("theme", isLight ? "light" : "dark");
+                }
+
+                applyTheme();
+
+                btn.addEventListener("click", () => {
+                    isLight = !isLight;
+                    applyTheme();
+                });
+            </script>
+        </div>
+
+        <!-- tabs -->
+        <script>
+            function showTab(tabId) {
+                document
+                    .querySelectorAll(".tab")
+                    .forEach((el) => el.classList.remove("active"));
+                document.getElementById(tabId).classList.add("active");
+            }
+        </script>
+
+        <script>
+            const API_URL = "https://bigstone-api.justparrot.workers.dev";
+
+            // forms (your real IDs)
+            const loginForm = document.getElementById("loginForm");
+            const registerForm = document.getElementById("regForm");
+
+            // inputs (your real IDs)
+            const loginUsr = document.getElementById("loginUsr");
+            const loginPswd = document.getElementById("loginPswd");
+
+            const regUsr = document.getElementById("regUsr");
+            const regPswd = document.getElementById("regPswd");
+            const regConsent = document.getElementById("registerConsent");
+
+            // simple UI feedback (you DON'T have these in HTML, so we create fallback)
+            function setMsg(text) {
+                alert(text); // crude but works since you didn't add message elements
+            }
+
+            // ---------------- LOGIN ----------------
+            loginForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                const username = loginUsr.value;
+                const password = loginPswd.value;
+
+                try {
+                    const res = await fetch(API_URL + "/auth/login", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username, password }),
+                    });
+
+                    if (!res.ok) {
+                        const text = await res.text();
+                        setMsg("Login error: " + text);
+                        return;
+                    }
+
+                    const data = await res.json();
+                    localStorage.setItem("token", data.token);
+
+                    setMsg("Logged in successfully");
+                } catch (err) {
+                    setMsg("Network error");
+                }
+            });
+
+            // ---------------- REGISTER ----------------
+            registerForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                const username = regUsr.value;
+                const password = regPswd.value;
+                const consent = regConsent.checked;
+
+                try {
+                    const res = await fetch(API_URL + "/auth/register", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username, password, consent }),
+                    });
+
+                    if (!res.ok) {
+                        const text = await res.text();
+                        setMsg("Register error: " + text);
+                        return;
+                    }
+
+                    // auto-login (your original idea preserved)
+                    const loginRes = await fetch(API_URL + "/auth/login", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username, password }),
+                    });
+
+                    if (!loginRes.ok) {
+                        const text = await loginRes.text();
+                        setMsg("Registered but login failed: " + text);
+                        return;
+                    }
+
+                    const data = await loginRes.json();
+                    localStorage.setItem("token", data.token);
+
+                    setMsg("Registered and logged in");
+                } catch (err) {
+                    setMsg("Network error");
+                }
+            });
+        </script>
+
+        <script>
+            const stars = document.getElementById("bg-stars");
+
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement("div");
+                star.classList.add("star");
+
+                star.style.left = Math.random() * 100 + "vw";
+                star.style.animationDuration = Math.random() * 3 + 2 + "s";
+                star.style.opacity = Math.random();
+
+                stars.appendChild(star);
+            }
+        </script>
+    </body>
+</html>
