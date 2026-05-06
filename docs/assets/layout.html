@@ -1,0 +1,81 @@
+<!-- layout to copy paste for each page -->
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bigstone DB</title>
+
+        <!-- frankenstyle -->
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/css/frankenstyle-kit.min.css"
+        />
+        <link rel="stylesheet" href="/assets/theme.css" />
+        <script
+            src="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/js/hwc-core.iife.js"
+            type="module"
+        ></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    </head>
+    <body class="bg color" style="--bg: var(--uk-bg); --color: var(--uk-bg-f)">
+        <div class="p-5"></div>
+
+        <!-- theme swap button
+        <button
+            id="themeBtn"
+            class="uk-button uk-button-default uk-button-xsmall theme-btn"
+            style="
+                --bg: var(--uk-secondary);
+                --color: var(--uk-secondary-f);
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                border: 1px solid var(--uk-border);
+            "
+        >
+            <uk-icon
+                id="themeIcn
+                class="size"
+                style="--size: 4"
+                icon="sun"
+            ></uk-icon>
+        </button>
+        -->
+
+        <!-- scripts -->
+        <div>
+            <script>
+                window.Lucide = {};
+                window.ApexCharts = {};
+            </script>
+            <script
+                src="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/js/hwc-icon.iife.js"
+                type="module"
+            ></script>
+            <script
+                src="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/js/hwc-components.iife.js"
+                type="module"
+            ></script>
+            <script>
+                const btn = document.getElementById("themeBtn");
+                const icon = document.getElementById("themeIcn");
+
+                let isLight = localStorage.getItem("theme") === "light";
+
+                function applyTheme() {
+                    document.documentElement.classList.toggle("dark", !isLight);
+                    icon.setAttribute("icon", isLight ? "sun" : "moon");
+                    localStorage.setItem("theme", isLight ? "light" : "dark");
+                }
+
+                applyTheme();
+
+                btn.addEventListener("click", () => {
+                    isLight = !isLight;
+                    applyTheme();
+                });
+            </script>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bigstone DB</title>
+
+        <!-- frankenstyle -->
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/css/frankenstyle-kit.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://formalparrot.github.io/bigstone-database/assets/theme.css"
+        />
+        <script
+            src="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/js/hwc-core.iife.js"
+            type="module"
+        ></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    </head>
+    <body class="bg color" style="--bg: var(--uk-bg); --color: var(--uk-bg-f)">
+        <div class="p-5">
+            <div
+                class="uk-card uk-card-body flex flex-col items-center justify-center text-center"
+                style="border: 0.5px solid var(--uk-border); position: relative"
+            >
+                <h1 class="uk-h1">Privacy Policy</h1>
+                <p class="uk-paragraph">Our Privacy Policy, and it's terms.</p>
+                <button
+                    id="themeBtn"
+                    class="uk-button uk-button-default uk-button-xsmall theme-btn"
+                    style="
+                        --bg: var(--uk-secondary);
+                        --color: var(--uk-secondary-f);
+                        position: absolute;
+                        top: 10px;
+                        right: 10px;
+                        border: 1px solid var(--uk-border);
+                    "
+                >
+                    <uk-icon
+                        id="themeIcn"
+                        class="size"
+                        style="--size: 4"
+                        icon="sun"
+                    ></uk-icon>
+                </button>
+            </div>
+
+            <div class="min-h-screen flex flex-col items-center">
+                <div
+                    class="uk-card uk-card-body mt-5 w-fit max-w-xl"
+                    style="border: 0.5px solid var(--uk-border)"
+                >
+                    <h4 class="uk-h4">
+                        This project stores the following personal data
+                    </h4>
+                    <ul class="uk-list uk-list-hyphen mt-3">
+                        <li>Username</li>
+                        <li>
+                            Password hash (bcrypt, never stored in plain text)
+                        </li>
+                        <li>
+                            Your projects and components tied to your account
+                        </li>
+                    </ul>
+                </div>
+
+                <div
+                    class="uk-card uk-card-body mt-5 w-fit max-w-xl"
+                    style="border: 0.5px solid var(--uk-border)"
+                >
+                    <h4 class="uk-h4">Purpose</h4>
+                    <p class="uk-paragraph">
+                        We use this data only to provide account access and
+                        project/component functionality.
+                    </p>
+                </div>
+
+                <div
+                    class="uk-card uk-card-body mt-5 w-fit max-w-xl"
+                    style="border: 0.5px solid var(--uk-border)"
+                >
+                    <h4 class="uk-h4">Data Retention</h4>
+                    <p class="uk-paragraph">
+                        Your data is kept until you choose to delete your
+                        account. Once deleted, all associated data is
+                        permanently removed.
+                    </p>
+                </div>
+
+                <div
+                    class="uk-card uk-card-body mt-5 w-fit max-w-xl"
+                    style="border: 0.5px solid var(--uk-border)"
+                >
+                    <h4 class="uk-h4">Your Rights</h4>
+
+                    <ul class="uk-list uk-list-hyphen mt-3">
+                        <li>
+                            You can request a copy of all your personal data via
+                            <code>GET /users/me/export</code>.
+                        </li>
+                        <li>
+                            You can delete your account and all associated data
+                            via
+                            <code>DELETE /users/me</code>.
+                        </li>
+                    </ul>
+                </div>
+
+                <div
+                    class="uk-card uk-card-body mt-5 w-fit max-w-xl"
+                    style="border: 0.5px solid var(--uk-border)"
+                >
+                    <h4 class="uk-h4">Third Parties</h4>
+                    <p class="uk-paragraph">
+                        We use GitHub Pages to host the frontend and Cloudflare
+                        D1 to store the database. They act as processors; we
+                        remain responsible for compliance.
+                    </p>
+                </div>
+
+                <div
+                    class="uk-card uk-card-body mt-5 w-fit max-w-xl"
+                    style="border: 0.5px solid var(--uk-border)"
+                >
+                    <h4 class="uk-h4">Contacts</h4>
+                    <p class="uk-paragraph">
+                        For questions regarding your data, please reach out via
+                        DM-ing `_justParrot` on <i><strong>discord.</strong></i>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- scripts -->
+        <div>
+            <script>
+                window.Lucide = {};
+                window.ApexCharts = {};
+            </script>
+            <script
+                src="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/js/hwc-icon.iife.js"
+                type="module"
+            ></script>
+            <script
+                src="https://cdn.jsdelivr.net/npm/frankenstyle@0.3.7/dist/js/hwc-components.iife.js"
+                type="module"
+            ></script>
+            <script>
+                const btn = document.getElementById("themeBtn");
+                const icon = document.getElementById("themeIcn");
+
+                let isLight = localStorage.getItem("theme") === "light";
+
+                function applyTheme() {
+                    document.documentElement.classList.toggle("dark", !isLight);
+                    icon.setAttribute("icon", isLight ? "sun" : "moon");
+                    localStorage.setItem("theme", isLight ? "light" : "dark");
+                }
+
+                applyTheme();
+
+                btn.addEventListener("click", () => {
+                    isLight = !isLight;
+                    applyTheme();
+                });
+            </script>
+        </div>
+    </body>
+</html>
